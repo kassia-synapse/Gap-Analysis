@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dossiê Estratégico v3 | Área de Avaliação | Florence Health</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+
+:root {
+  /* Brand */
+  --purple:#5a4a82;--purple2:#764ba2;--purple3:#8b5cf6;
+  --grad-a:#667eea;--grad-b:#764ba2;
+  /* Backgrounds */
+  --bg:#f5f3fb;--bg2:#faf9fd;--bg3:#f3f0fa;--bg4:#ece7f7;
+  --card:#ffffff;
+  /* Borders */
+  --border:#e9e5f3;--border2:#d6cfeb;
+  /* Text */
+  --text:#2d2a3d;--text2:#6b6783;--muted:#9994ad;
+  /* Status */
+  --accent:#dc2626;--warn:#f59e0b;--ok:#10b981;
+  --clinical:#0891b2;--relational:#8b5cf6;--operational:#f59e0b;
+  /* Shadows */
+  --shadow:0 1px 3px rgba(90,74,130,.07),0 1px 2px rgba(90,74,130,.04);
+  --shadow-md:0 4px 20px rgba(90,74,130,.10);
+  --shadow-lg:0 8px 32px rgba(90,74,130,.12);
+  --sw:256px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;font-size:14px;background:var(--bg);color:var(--text);display:flex;min-height:100vh;overflow-x:hidden;line-height:1.6}
+
+/* ── SIDEBAR ── */
+#sb{width:var(--sw);min-height:100vh;background:#ffffff;border-right:1px solid var(--border);position:fixed;left:0;top:0;display:flex;flex-direction:column;z-index:100;box-shadow:1px 0 0 var(--border)}
+.sb-logo{padding:22px 18px 16px;border-bottom:1px solid var(--border)}
+.sb-logo .brand{font-family:'DM Serif Display',serif;font-size:17px;color:var(--purple);letter-spacing:-.2px}
+.sb-logo .ver{display:inline-block;margin-left:7px;padding:1px 7px;background:var(--bg4);border-radius:10px;font-size:9px;font-weight:700;color:var(--purple2);font-family:'Inter',sans-serif}
+.sb-logo .sub{font-size:10px;color:var(--muted);margin-top:3px;letter-spacing:.8px;text-transform:uppercase}
+.sb-nav{flex:1;padding:10px 0;overflow-y:auto}
+.nav-grp{padding:12px 16px 3px;font-size:9px;font-weight:700;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase}
+.ni{display:flex;align-items:center;gap:8px;padding:7px 16px;cursor:pointer;font-size:12.5px;font-weight:500;color:var(--text2);transition:all .18s;border-left:2px solid transparent;border-right:0}
+.ni:hover{color:var(--purple);background:var(--bg4)}
+.ni.active{color:var(--purple);border-left-color:var(--purple);background:var(--bg4);font-weight:600}
+.ni.new-badge::after{content:'Novo';font-size:9px;font-weight:600;color:var(--ok);background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:8px;padding:1px 6px;margin-left:auto}
+.sb-foot{padding:12px 16px;border-top:1px solid var(--border);font-size:10px;color:var(--muted);line-height:1.65}
+
+/* ── MAIN ── */
+#main{margin-left:var(--sw);flex:1;min-height:100vh;display:flex;flex-direction:column}
+#topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:10px 28px;display:flex;align-items:center;justify-content:space-between}
+.tb-title{font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:var(--text2)}
+.tb-meta{display:flex;gap:8px;align-items:center}
+.badge{padding:3px 9px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:.3px}
+.bd-red{background:rgba(220,38,38,.07);color:#b91c1c;border:1px solid rgba(220,38,38,.18)}
+.bd-cyan{background:var(--bg4);color:var(--purple);border:1px solid var(--border2)}
+.bd-ok{background:rgba(16,185,129,.07);color:#047857;border:1px solid rgba(16,185,129,.18)}
+
+/* ── SECTIONS ── */
+.sec{display:none;padding:32px 28px 60px;animation:fadeUp .25s ease}
+.sec.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,var(--grad-a) 0%,var(--grad-b) 100%);border-radius:14px;padding:42px 44px;margin-bottom:28px;position:relative;overflow:hidden;box-shadow:var(--shadow-md)}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E")}
+.hero-tag{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.75);margin-bottom:10px}
+.hero-title{font-family:'DM Serif Display',serif;font-size:36px;line-height:1.15;color:#fff;margin-bottom:10px}
+.hero-sub{font-size:14px;color:rgba(255,255,255,.72);max-width:540px;line-height:1.65;margin-bottom:28px}
+.hero-stats{display:flex;gap:32px;flex-wrap:wrap}
+.hs{text-align:center}
+.hs .v{font-family:'DM Serif Display',serif;font-size:28px;color:#fff}
+.hs .l{font-size:10px;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+
+/* ── SECTION HEADER ── */
+.sh{margin-bottom:22px}
+.sh-title{font-family:'DM Serif Display',serif;font-size:22px;color:var(--text);margin-bottom:5px}
+.sh-sub{font-size:13px;color:var(--text2);line-height:1.65}
+.sh-line{height:1px;background:linear-gradient(90deg,var(--border2),transparent);margin:8px 0 20px}
+
+/* ── KPI CARDS ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:12px;margin-bottom:24px}
+.kc{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 18px;position:relative;transition:transform .18s,box-shadow .18s;box-shadow:var(--shadow)}
+.kc:hover{transform:translateY(-1px);box-shadow:var(--shadow-md)}
+.kc .kl{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:7px}
+.kc .kv{font-family:'DM Serif Display',serif;font-size:24px;color:var(--text);line-height:1.1;margin-bottom:3px}
+.kc .ks{font-size:11px;color:var(--muted)}
+.kc .ki{display:none}
+.kc.danger{border-color:rgba(220,38,38,.2);background:#fff5f5}.kc.danger .kv{color:#b91c1c}
+.kc.warn{border-color:rgba(245,158,11,.2);background:#fffbeb}.kc.warn .kv{color:#b45309}
+.kc.ok{border-color:rgba(16,185,129,.2);background:#f0fdf4}.kc.ok .kv{color:#047857}
+
+/* ── CHART CARDS ── */
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:16px;margin-bottom:22px}
+.cc{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;box-shadow:var(--shadow)}
+.ct{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px}
+.cd{font-size:11px;color:var(--muted);margin-bottom:14px}
+
+/* ── TABLES ── */
+.tc{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:18px;box-shadow:var(--shadow)}
+.tc-head{padding:13px 16px;border-bottom:1px solid var(--border);background:var(--bg3)}
+.tc-head h3{font-size:13px;font-weight:600;color:var(--text)}
+.ts{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+thead th{background:var(--bg3);padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--purple);text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+tbody tr{border-bottom:1px solid var(--border);transition:background .12s}
+tbody tr:hover{background:var(--bg3)}
+tbody tr:last-child{border-bottom:none}
+td{padding:8px 12px;font-size:12px;color:var(--text2)}
+td.center{text-align:center}
+td.mono{font-family:'Inter',sans-serif;font-weight:500}
+td.ssa{color:var(--purple);font-weight:600}
+td.rec{color:#b45309;font-weight:600}
+
+/* ── PILLS ── */
+.pill{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600}
+.p-red{background:rgba(220,38,38,.07);color:#b91c1c;border:1px solid rgba(220,38,38,.18)}
+.p-yellow{background:rgba(245,158,11,.08);color:#92400e;border:1px solid rgba(245,158,11,.2)}
+.p-green{background:rgba(16,185,129,.07);color:#047857;border:1px solid rgba(16,185,129,.18)}
+.p-blue{background:var(--bg4);color:var(--purple);border:1px solid var(--border2)}
+.p-purple{background:rgba(139,92,246,.08);color:#6d28d9;border:1px solid rgba(139,92,246,.2)}
+.p-gray{background:#f3f4f6;color:#6b7280;border:1px solid #e5e7eb}
+
+/* ── ALERTS ── */
+.al{border-radius:8px;padding:14px 16px;margin-bottom:14px;border-left:3px solid transparent}
+.al .al-t{font-size:13px;font-weight:600;margin-bottom:3px}
+.al .al-tx{font-size:12px;line-height:1.65;color:var(--text2)}
+.al-red{background:#fff5f5;border-left-color:#dc2626}.al-red .al-t{color:#b91c1c}
+.al-yellow{background:#fffbeb;border-left-color:#f59e0b}.al-yellow .al-t{color:#92400e}
+.al-green{background:#f0fdf4;border-left-color:#10b981}.al-green .al-t{color:#047857}
+.al-blue{background:var(--bg4);border-left-color:var(--purple)}.al-blue .al-t{color:var(--purple)}
+
+/* ── DECISION CARDS ── */
+.dc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px;margin-bottom:22px}
+.dc{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;position:relative;box-shadow:var(--shadow)}
+.dc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--grad-a),var(--grad-b));border-radius:10px 10px 0 0}
+.dc .dc-num{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.dc .dc-title{font-family:'DM Serif Display',serif;font-size:15px;color:var(--text);margin-bottom:9px;line-height:1.35}
+.dc .dc-ctx{font-size:12px;color:var(--text2);line-height:1.65;margin-bottom:11px}
+.dc .dc-owner{font-size:11px;font-weight:500;color:var(--purple2);padding:5px 9px;background:var(--bg4);border-radius:5px;border:1px solid var(--border)}
+.dc .dc-urgency{position:absolute;top:14px;right:14px}
+
+/* ── ARCHETYPE CARDS ── */
+.arch-card{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:20px;overflow:hidden;box-shadow:var(--shadow)}
+.arch-head{padding:18px 20px 14px;display:flex;align-items:flex-start;justify-content:space-between;border-bottom:1px solid var(--border);background:var(--bg3)}
+.arch-head-left .arch-num{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+.arch-head-left .arch-name{font-family:'DM Serif Display',serif;font-size:18px;color:var(--text)}
+.arch-head-left .arch-desc{font-size:12px;color:var(--text2);margin-top:4px;max-width:440px;line-height:1.5}
+.arch-badge-wrap{display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0;margin-left:16px}
+.arch-body{padding:18px 20px}
+.arch-compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.arch-unit{background:var(--bg3);border-radius:8px;padding:14px;border:1px solid var(--border)}
+.arch-unit .unit-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:9px}
+.arch-unit.ssa-unit .unit-label{color:var(--purple)}
+.arch-unit.rec-unit .unit-label{color:#b45309}
+.arch-unit .fact{display:flex;align-items:flex-start;gap:8px;margin-bottom:5px;font-size:12px}
+.arch-unit .fact .lbl{color:var(--muted);flex-shrink:0;width:115px}
+.arch-unit .fact .val{color:var(--text2);font-weight:500}
+.arch-unit .fact .val.good{color:#047857}
+.arch-unit .fact .val.bad{color:#b91c1c}
+.arch-unit .fact .val.warn{color:#92400e}
+.arch-insight{background:var(--bg4);border:1px solid var(--border2);border-radius:7px;padding:13px 15px;margin-top:4px}
+.arch-insight .ai-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--purple);margin-bottom:4px}
+.arch-insight .ai-text{font-size:12px;color:var(--text2);line-height:1.65}
+
+/* ── CAUSE-ROOT ── */
+.cr-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px}
+.cr-card{border-radius:10px;padding:20px}
+.cr-symptoms{background:#fff5f5;border:1px solid rgba(220,38,38,.12)}
+.cr-causes{background:#f0fdf4;border:1px solid rgba(16,185,129,.12)}
+.cr-title{font-family:'DM Serif Display',serif;font-size:16px;margin-bottom:13px}
+.cr-symptoms .cr-title{color:#b91c1c}
+.cr-causes .cr-title{color:#047857}
+.cr-item{display:flex;align-items:flex-start;gap:7px;margin-bottom:9px;font-size:12px;line-height:1.5;color:var(--text2)}
+.cr-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.cr-symptoms .cr-dot{background:#b91c1c}
+.cr-causes .cr-dot{background:#047857}
+
+/* ── COMPARE BARS ── */
+.cbar-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.cbar-lbl{font-size:11px;color:var(--text2);width:175px;flex-shrink:0}
+.cbar-bars{flex:1;display:flex;flex-direction:column;gap:3px}
+.cbar-wrap{display:flex;align-items:center;gap:7px}
+.cbar-unit{font-size:9px;font-weight:700;width:24px;flex-shrink:0}
+.cbar-track{flex:1;height:6px;background:var(--bg3);border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.cbar-fill{height:100%;border-radius:10px;transition:width 1.2s ease}
+.cbar-ssa{background:linear-gradient(90deg,var(--purple),var(--purple2))}
+.cbar-rec{background:linear-gradient(90deg,#b45309,#f59e0b)}
+.cbar-pct{font-size:10px;font-weight:600;width:34px;text-align:right;flex-shrink:0}
+
+/* ── FUNNEL ── */
+.funnel-wrap{display:flex;flex-direction:column;align-items:center;gap:0;padding:8px 0}
+.fs{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-radius:5px;margin-bottom:2px;font-size:11.5px;font-weight:600;color:#fff;width:100%;transition:transform .12s;cursor:default}
+.fs:hover{transform:scale(1.01);z-index:1}
+
+/* ── ROADMAP ── */
+.roadmap{display:flex;flex-direction:column;gap:0}
+.rm-item{display:flex;gap:16px}
+.rm-line{display:flex;flex-direction:column;align-items:center}
+.rm-dot{width:13px;height:13px;border-radius:50%;border:2px solid var(--border2);background:var(--card);flex-shrink:0;margin-top:4px}
+.rm-dot.filled{background:linear-gradient(135deg,var(--grad-a),var(--grad-b));border-color:var(--grad-b)}
+.rm-vline{flex:1;width:1px;background:var(--border);margin:3px 0;min-height:26px}
+.rm-content{padding-bottom:24px;flex:1}
+.rm-phase{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--purple2);margin-bottom:3px}
+.rm-title{font-family:'DM Serif Display',serif;font-size:14px;color:var(--text);margin-bottom:5px}
+.rm-text{font-size:12px;color:var(--text2);line-height:1.65}
+.rm-tag{display:inline-block;margin-top:6px;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:500;background:var(--bg4);color:var(--purple);border:1px solid var(--border2)}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:2px;margin-bottom:16px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.tab-btn{padding:7px 13px;font-size:12px;font-weight:500;cursor:pointer;color:var(--text2);border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .18s}
+.tab-btn.active{color:var(--purple);border-bottom-color:var(--purple);font-weight:600}
+.tab-btn:hover:not(.active){color:var(--purple)}
+.tab-pane{display:none}.tab-pane.active{display:block}
+
+/* ── GLOSSARY ── */
+.glos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.glos-card{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:14px;box-shadow:var(--shadow)}
+.glos-card .gc-term{font-family:'DM Serif Display',serif;font-size:14px;color:var(--purple);margin-bottom:5px}
+.glos-card .gc-def{font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:5px}
+.glos-card .gc-note{font-size:11px;color:var(--muted);font-style:italic;border-top:1px solid var(--border);padding-top:5px;margin-top:5px}
+
+/* ── LIMIT CARDS ── */
+.limit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(265px,1fr));gap:10px;margin-bottom:18px}
+.limit-card{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:14px;display:flex;gap:11px;box-shadow:var(--shadow)}
+.limit-card .lc-title{font-size:13px;font-weight:600;color:#92400e;margin-bottom:3px}
+.limit-card .lc-desc{font-size:12px;color:var(--text2);line-height:1.6}
+.limit-card .lc-mitigation{font-size:11px;color:#047857;margin-top:5px;padding-top:5px;border-top:1px solid var(--border)}
+
+/* ── IMPACT MATRIX ── */
+.impact-row{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr 1fr;gap:1px;background:var(--border)}
+.impact-row.hdr{background:transparent;gap:0}
+.impact-cell{background:var(--card);padding:9px 11px;font-size:11px;color:var(--text2)}
+.impact-cell.hdr{background:var(--bg3);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--purple)}
+.impact-cell.hi{background:#fff5f5;color:#b91c1c}
+.impact-cell.med{background:#fffbeb;color:#92400e}
+.impact-cell.low{background:var(--card);color:var(--muted)}
+
+/* ── INSIGHT CARDS ── */
+.insight-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.ins-card{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:16px;box-shadow:var(--shadow)}
+.ins-card .in{font-family:'DM Serif Display',serif;font-size:34px;color:var(--border2);line-height:1;margin-bottom:6px}
+.ins-card .it{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px}
+.ins-card .ix{font-size:12px;color:var(--text2);line-height:1.65}
+
+/* ── FILTER BAR ── */
+.filter-bar{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap}
+.filter-btn{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--text2);transition:all .18s}
+.filter-btn.active{background:var(--bg4);color:var(--purple);border-color:var(--border2)}
+
+/* ── TWO/THREE COL ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:900px){.two-col,.three-col,.arch-compare,.cr-grid{grid-template-columns:1fr}}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--muted)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  #sb{display:none}
+  #main{margin-left:0}
+  .sec{padding:20px 16px 40px}
+  .hero{padding:26px 20px}
+  .hero-title{font-size:26px}
+  .cg{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav id="sb">
+  <div class="sb-logo">
+    <div class="brand">Florence Health <span class="ver">v3</span></div>
+    <div class="sub">Área de Avaliação · Abril 2026</div>
+  </div>
+  <div class="sb-nav">
+    <div class="nav-grp">Executivo</div>
+    <div class="ni active" onclick="show('exec')">Visão Executiva</div>
+    <div class="ni" onclick="show('decisions')">Decisões Necessárias</div>
+
+    <div class="nav-grp">Diagnóstico</div>
+    <div class="ni" onclick="show('overview')">Diagnóstico Geral</div>
+    <div class="ni" onclick="show('causas')">Causa-Raiz vs Sintomas</div>
+    <div class="ni" onclick="show('limites')">Limites da Análise</div>
+
+    <div class="nav-grp">Análise</div>
+    <div class="ni" onclick="show('funil')">Estrutura do Funil</div>
+    <div class="ni" onclick="show('comparativo')">SSA vs REC</div>
+    <div class="ni" onclick="show('qualidade')">Qualidade de Dados</div>
+    <div class="ni new-badge" onclick="show('jornada')">Jornada dos Casos</div>
+    <div class="ni" onclick="show('prequal')">Pré-Qualificação</div>
+
+    <div class="nav-grp">Estratégia</div>
+    <div class="ni" onclick="show('indicadores')">Indicadores</div>
+    <div class="ni" onclick="show('padronizacao')">Padronização</div>
+    <div class="ni" onclick="show('impacto')">Impacto no Negócio</div>
+    <div class="ni" onclick="show('plano')">Plano de Ação</div>
+    <div class="ni new-badge" onclick="show('glossario')">Glossário</div>
+
+    <div class="nav-grp">Análise Complementar</div>
+    <div class="ni new-badge" onclick="show('operacional')">Inteligência Operacional</div>
+  </div>
+  <div class="sb-foot">CRM: 1.425 registros · SSA + REC<br>Pré-Qual: 1.400 leads · Dez/25–Abr/26<br>Base deduplicada: 889 negociações únicas</div>
+</nav>
+
+<main id="main">
+  <div id="topbar">
+    <div class="tb-title">Dossiê Estratégico v3 · Área de Avaliação · Florence Health</div>
+    <div class="tb-meta">
+      <span class="badge bd-red">5 Alertas Críticos</span>
+      <span class="badge bd-ok">Nova Camada Operacional</span>
+      <span class="badge bd-cyan">v3 · Abril 2026</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════ VISÃO EXECUTIVA ══════════════════════════ -->
+  <section id="sec-exec" class="sec active">
+    <div class="hero">
+      <div class="hero-tag">Dossiê Estratégico v3 · Área de Avaliação · Florence Health</div>
+      <div class="hero-title">Diagnóstico, Governança<br>e Decisões Necessárias</div>
+      <div class="hero-sub">A Florence opera bem, mas não consegue ver o que opera. Este dossiê mostra onde estão os gaps, por que existem e o que precisa ser decidido — agora.</div>
+      <div class="hero-stats">
+        <div class="hs"><div class="v">1.425</div><div class="l">Registros CRM</div></div>
+        <div class="hs"><div class="v">1.400</div><div class="l">Leads Pré-Qual</div></div>
+        <div class="hs"><div class="v">8</div><div class="l">Casos Auditados</div></div>
+        <div class="hs"><div class="v">72%</div><div class="l">Taxa de Admissão Média</div></div>
+        <div class="hs"><div class="v">5</div><div class="l">Decisões Executivas</div></div>
+      </div>
+    </div>
+
+    <!-- Diagnóstico em uma tela -->
+    <div class="sh"><div class="sh-title">O Diagnóstico em Uma Tela</div><div class="sh-line"></div></div>
+
+    <div class="al al-red"><div class="al-b"><div class="al-t">PROBLEMA CENTRAL</div><div class="al-tx">A Florence tem alta eficácia clínica (72% de conversão média), mas <strong>baixa governança de dados</strong>. A operação funciona — mas não consegue medir, comparar nem aprender com o que faz. Esta invisibilidade é o maior risco estratégico, não a operação em si.</div></div></div>
+    <div class="al al-red"><div class="al-b"><div class="al-t">CAUSA RAIZ PRINCIPAL</div><div class="al-tx">Dois sistemas paralelos sem integração automática — Planilha de Pré-Qualificação (1.400 leads) e RD CRM (1.425 registros) — com transferência manual de dados. Esta é a raiz de quase todos os campos vazios no CRM. Resolver campo por campo sem atacar isso é tratar sintoma, não causa.</div></div></div>
+    <div class="al al-yellow"><div class="al-b"><div class="al-t">EFEITO MAIS VISÍVEL</div><div class="al-tx">O gap de conversão de 29,4pp entre SSA (81,9%) e REC (52,5%) provavelmente não reflete diferença real de eficácia — reflete critérios diferentes de entrada do lead no CRM. As taxas <strong>não são comparáveis</strong> sem padronizar este critério.</div></div></div>
+    <div class="al al-blue"><div class="al-b"><div class="al-t">A BOA NOTÍCIA</div><div class="al-tx">Os 8 casos auditados mostram que quando o processo flui bem (Convênio Rápido, ambas as unidades), os dados são excelentes. O problema não é falta de capacidade da equipe — é falta de processo e configuração adequada do CRM.</div></div></div>
+
+    <!-- 3 Ações imediatas -->
+    <div class="sh" style="margin-top:28px;"><div class="sh-title">3 Ações de Maior Retorno Imediato</div><div class="sh-line"></div></div>
+    <div class="three-col">
+      <div class="cc" style="border-color:rgba(0,137,123,.25)">
+        <div class="ct" style="color:var(--ok)">1 semana · Custo Zero</div>
+        <div class="cd">Quick Win</div>
+        <p style="font-size:13px;color:var(--text);line-height:1.6">Tornar <strong>Fonte</strong> e <strong>Data do 1º Contato</strong> obrigatórios no CRM (bloqueio de etapa). Impacto imediato em rastreamento de ROI e SLA. Nenhum investimento necessário.</p>
+      </div>
+      <div class="cc" style="border-color:rgba(245,124,0,.25)">
+        <div class="ct" style="color:var(--warn)">2 semanas · Processo</div>
+        <div class="cd">Decisão de Gestão</div>
+        <p style="font-size:13px;color:var(--text);line-height:1.6">Definir <strong>critério único</strong> de quando um lead entra no CRM em SSA e REC. Pré-requisito para qualquer comparação válida entre unidades e para metas baseadas em dados reais.</p>
+      </div>
+      <div class="cc" style="border-color:rgba(90,74,130,.2)">
+        <div class="ct" style="color:var(--purple)">2–3 meses · Estrutural</div>
+        <div class="cd">Decisão Estratégica</div>
+        <p style="font-size:13px;color:var(--text);line-height:1.6">Integrar <strong>Planilha Pré-Qual → CRM</strong>, eliminando a dupla digitação. Maior impacto, maior esforço — solução definitiva para a causa raiz da maioria dos problemas.</p>
+      </div>
+    </div>
+
+    <!-- Alertas resumidos -->
+    <div class="sh" style="margin-top:12px;"><div class="sh-title">5 Alertas Críticos</div><div class="sh-line"></div></div>
+    <div class="tc"><div class="ts"><table>
+      <thead><tr><th>#</th><th>Alerta</th><th>SSA</th><th>REC</th><th>Impacto no Negócio</th><th>Urgência</th></tr></thead>
+      <tbody>
+        <tr><td class="mono center">1</td><td>Campo "Fonte" zerado</td><td class="ssa center mono">0%</td><td class="rec center mono">90%</td><td>ROI de marketing incalculável em SSA</td><td class="center"><span class="pill p-red">Imediata</span></td></tr>
+        <tr><td class="mono center">2</td><td>Data do 1º Contato ausente</td><td class="ssa center mono">45%</td><td class="rec center mono">1%</td><td>SLA de atendimento completamente invisível</td><td class="center"><span class="pill p-red">Imediata</span></td></tr>
+        <tr><td class="mono center">3</td><td>Abismo de conversão (29,4pp)</td><td class="ssa center mono">81,9%</td><td class="rec center mono">52,5%</td><td>Comparação inválida — critérios diferentes</td><td class="center"><span class="pill p-red">Imediata</span></td></tr>
+        <tr><td class="mono center">4</td><td>Dupla digitação (causa raiz)</td><td class="center">SIM</td><td class="center">SIM</td><td>Perda sistêmica de dados na transferência manual</td><td class="center"><span class="pill p-yellow">Alta</span></td></tr>
+        <tr><td class="mono center">5</td><td>CRM abandonado pós-alta</td><td class="ssa center mono">&lt;30%</td><td class="rec center mono">&lt;28%</td><td>Permanência, qualidade e NPS invisíveis</td><td class="center"><span class="pill p-yellow">Alta</span></td></tr>
+      </tbody>
+    </table></div></div>
+  </section>
+
+  <!-- ══════════════════════════ DECISÕES ══════════════════════════ -->
+  <section id="sec-decisions" class="sec">
+    <div class="sh"><div class="sh-title">Decisões Executivas Necessárias</div><div class="sh-sub">Estas decisões precisam ser tomadas pela gestão sênior. Sem elas, as ações técnicas terão impacto limitado.</div><div class="sh-line"></div></div>
+
+    <div class="dc-grid">
+      <div class="dc">
+        <div class="dc-num">Decisão 01</div>
+        <div class="dc-title">Padronizar o critério de entrada do lead no CRM</div>
+        <div class="dc-ctx">SSA e REC cadastram leads em momentos diferentes. SSA registra leads já qualificados (alta conversão). REC registra cedo (baixa conversão). Sem alinhar este critério, nenhum comparativo entre unidades é válido e nenhuma meta pode ser estabelecida com base em dados reais.</div>
+        <div style="margin-bottom:12px;font-size:11px;color:var(--muted)"><strong style="color:var(--text)">Opções:</strong> A) Alinhar pela entrada mais precoce (como REC hoje) | B) Alinhar pela entrada mais tardia (como SSA hoje) | C) Criar etapa "Em triagem" para distinguir ambas</div>
+        <div class="dc-owner">Dono: Gestão de Avaliação + Coordenação CRM</div>
+        <div class="dc-urgency"><span class="pill p-red">Imediata</span></div>
+      </div>
+      <div class="dc">
+        <div class="dc-num">Decisão 02</div>
+        <div class="dc-title">Aprovar obrigatoriedade dos campos críticos no CRM</div>
+        <div class="dc-ctx">"Fonte" (0% em SSA) e "Data do 1º Contato" (1% em REC) estão zerados e inviabilizam indicadores essenciais. Tornar obrigatórios exige configuração técnica e mudança de hábito operacional. Sem esta decisão, os dados não melhorarão organicamente.</div>
+        <div style="margin-bottom:12px;font-size:11px;color:var(--muted)"><strong style="color:var(--text)">Opções:</strong> A) Obrigatório já (bloqueio de etapa) | B) Meta gradual de 80% em 30 dias | C) Manter atual</div>
+        <div class="dc-owner">Dono: Gestão + TI/CRM</div>
+        <div class="dc-urgency"><span class="pill p-red">Imediata</span></div>
+      </div>
+      <div class="dc">
+        <div class="dc-num">Decisão 03</div>
+        <div class="dc-title">Priorizar ou não a integração Pré-Qual → CRM</div>
+        <div class="dc-ctx">Esta é a decisão de maior impacto e maior custo. A integração eliminaria a dupla digitação e resolveria a causa raiz de ~70% dos campos vazios. Exige 3-6 meses de TI. A alternativa é um formulário intermediário (mais rápido, menos robusto).</div>
+        <div style="margin-bottom:12px;font-size:11px;color:var(--muted)"><strong style="color:var(--text)">Opções:</strong> A) Integração técnica agora | B) Formulário unificado (médio prazo) | C) Protocolo rígido de transferência manual</div>
+        <div class="dc-owner">Dono: Diretoria + TI + Produto</div>
+        <div class="dc-urgency"><span class="pill p-yellow">Alta</span></div>
+      </div>
+      <div class="dc">
+        <div class="dc-num">Decisão 04</div>
+        <div class="dc-title">Definir o dono da governança de dados da operação</div>
+        <div class="dc-ctx">Hoje não há responsável claro pelo monitoramento da qualidade de dados no CRM. Campos vazios não geram alertas, cards "zumbi" não são tratados e não há auditoria periódica. Alguém precisa ser o "zelador do dado".</div>
+        <div style="margin-bottom:12px;font-size:11px;color:var(--muted)"><strong style="color:var(--text)">Opções:</strong> A) Criar papel dedicado | B) Atribuir a responsável existente | C) Contratar consultoria</div>
+        <div class="dc-owner">Dono: Diretoria + RH</div>
+        <div class="dc-urgency"><span class="pill p-yellow">Alta</span></div>
+      </div>
+      <div class="dc">
+        <div class="dc-num">Decisão 05</div>
+        <div class="dc-title">Definir prioridade e prazo para ativação do NPS</div>
+        <div class="dc-ctx">Os campos de NPS (Entrada, Saída, Médico) existem no CRM mas estão com 0% de preenchimento — nenhuma coleta está ativa. Ativar o NPS traria dados de experiência da família hoje completamente invisíveis. A decisão é sobre priorização de prazo.</div>
+        <div style="margin-bottom:12px;font-size:11px;color:var(--muted)"><strong style="color:var(--text)">Opções:</strong> A) Ativar próximo trimestre | B) Após estabilização dos campos críticos | C) Ferramenta externa integrada</div>
+        <div class="dc-owner">Dono: Gestão Clínica + CRM</div>
+        <div class="dc-urgency"><span class="pill p-blue">Planejamento</span></div>
+      </div>
+    </div>
+
+    <div class="al al-blue"><div class="al-b"><div class="al-t">NOTA AO GESTOR</div><div class="al-tx">As Decisões 1 e 2 são pré-requisito para quase todos os outros indicadores do roadmap. Tomá-las esta semana não custa nada e desbloqueia meses de análise futura.</div></div></div>
+  </section>
+
+  <!-- ══════════════════════════ OVERVIEW ══════════════════════════ -->
+  <section id="sec-overview" class="sec">
+    <div class="sh"><div class="sh-title">Diagnóstico Geral</div><div class="sh-sub">Visão quantitativa completa da base — CRM + Pré-Qualificação</div><div class="sh-line"></div></div>
+    <div class="kpi-grid">
+      <div class="kc ok"><div class="kl">Conversão SSA</div><div class="kv">81,9%</div><div class="ks">704 vendidas / 860 fechadas</div></div>
+      <div class="kc warn"><div class="kl">Conversão REC</div><div class="kv">52,5%</div><div class="ks">GAP de 29,4pp — critérios diferentes</div></div>
+      <div class="kc danger"><div class="kl">Campo "Fonte" em SSA</div><div class="kv">0%</div><div class="ks">Marketing completamente cego</div></div>
+      <div class="kc danger"><div class="kl">Data 1º Contato (Global)</div><div class="kv">30,5%</div><div class="ks">69,5% sem SLA mensurável</div></div>
+      <div class="kc warn"><div class="kl">Campos com 0% Fill</div><div class="kv">29</div><div class="ks">25,9% dos 112 campos — "obesidade"</div></div>
+      <div class="kc"><div class="kl">Score Médio (8 casos)</div><div class="kv">85/100</div><div class="ks">BOM — mas admitidos: 88 | perdidos: 71</div></div>
+    </div>
+    <div class="cg">
+      <div class="cc"><div class="ct">Status por Unidade</div><div class="cd">Admitidos, perdidos e em andamento</div><canvas id="chStatus" height="220"></canvas></div>
+      <div class="cc"><div class="ct">Volume Mensal de Leads</div><div class="cd">Dez/25 a Mar/26 — corte analítico até 31/mar/2026</div><canvas id="chVolume" height="220"></canvas></div>
+      <div class="cc"><div class="ct">Distribuição por Etapa</div><div class="cd">SSA + REC combinados</div><canvas id="chEtapa" height="220"></canvas></div>
+      <div class="cc"><div class="ct">Top 8 Motivos de Perda</div><div class="cd">SSA (azul) vs REC (laranja)</div><canvas id="chPerda" height="220"></canvas></div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ CAUSAS RAIZ ══════════════════════════ -->
+  <section id="sec-causas" class="sec">
+    <div class="sh"><div class="sh-title">Causa-Raiz vs Sintomas</div><div class="sh-sub">Separar o que aparece na superfície do que realmente origina o problema — a solução certa depende de atacar a causa, não o sintoma.</div><div class="sh-line"></div></div>
+
+    <div class="cr-grid">
+      <div class="cr-card cr-symptoms">
+        <div class="cr-title">Sintomas Visíveis</div>
+        <div class="cr-item"><div class="cr-dot"></div><span>Campo "Fonte" zerado em SSA (0%) — origem dos leads desconhecida</span></div>
+        <div class="cr-item"><div class="cr-dot"></div><span>Data do 1º Contato zerada (69,5% global) — SLA invisível</span></div>
+        <div class="cr-item"><div class="cr-dot"></div><span>Taxas de conversão incomparáveis entre SSA e REC (29,4pp)</span></div>
+        <div class="cr-item"><div class="cr-dot"></div><span>25,9% dos campos com 0% de preenchimento</span></div>
+        <div class="cr-item"><div class="cr-dot"></div><span>Cards "zumbi" em andamento sem atividade (ex: SSA Pré-Implantação)</span></div>
+        <div class="cr-item"><div class="cr-dot"></div><span>CRM abandonado pós-alta (preenchimento &lt;30%)</span></div>
+        <div class="cr-item"><div class="cr-dot"></div><span>Motivo de perda genérico ou vazio (SSA: 16%)</span></div>
+        <div class="cr-item"><div class="cr-dot"></div><span>Previsão de fechamento sempre vazia (0%)</span></div>
+      </div>
+      <div class="cr-card cr-causes">
+        <div class="cr-title">Causas-Raiz Identificadas</div>
+        <div class="cr-item"><div class="cr-dot"></div><span><strong>Sistema:</strong> Dois sistemas sem integração automática (planilha + CRM)</span></div>
+        <div class="cr-item"><div class="cr-dot"></div><span><strong>Cultura:</strong> CRM usado como registro retroativo, não como ferramenta de gestão em tempo real</span></div>
+        <div class="cr-item"><div class="cr-dot"></div><span><strong>Governança:</strong> Critérios diferentes de entrada no CRM entre SSA e REC</span></div>
+        <div class="cr-item"><div class="cr-dot"></div><span><strong>Configuração:</strong> Campos críticos não configurados como obrigatórios</span></div>
+        <div class="cr-item"><div class="cr-dot"></div><span><strong>Processo:</strong> Ausência de protocolo de fechamento de casos (leads perdidos)</span></div>
+        <div class="cr-item"><div class="cr-dot"></div><span><strong>Governança:</strong> Sem dono da qualidade do dado — ninguém audita, ninguém cobra</span></div>
+        <div class="cr-item"><div class="cr-dot"></div><span><strong>Configuração:</strong> Lista "Motivo de Perda" com "Outros" sem obrigatoriedade</span></div>
+        <div class="cr-item"><div class="cr-dot"></div><span><strong>Percepção:</strong> CRM visto como ferramenta de captação, não de jornada completa</span></div>
+      </div>
+    </div>
+    <div class="al al-blue"><div class="al-b"><div class="al-t">CONCLUSÃO CENTRAL</div><div class="al-tx">A maioria dos sintomas tem duas causas-raiz estruturais: <strong>(1)</strong> dois sistemas sem integração automática e <strong>(2)</strong> CRM usado retroativamente. Resolver apenas campo por campo, sem atacar estas causas, é ineficiente e temporário. A solução sustentável exige mudança de sistema e de cultura.</div></div></div>
+
+    <div class="sh" style="margin-top:28px;"><div class="sh-title" style="font-size:20px;">Mapeamento Detalhado: Sintoma → Causa → Nível</div><div class="sh-line"></div></div>
+    <div class="tc"><div class="ts"><table>
+      <thead><tr><th>Sintoma Visível</th><th>Causa-Raiz</th><th>Nível da Causa</th></tr></thead>
+      <tbody>
+        <tr><td>Campo "Fonte" zerado em SSA (0%)</td><td>Campo não obrigatório + não transferido da planilha para o CRM</td><td class="center"><span class="pill p-red">Config + Processo</span></td></tr>
+        <tr><td>Data do 1º Contato zerada (69,5%)</td><td>CRM alimentado retroativamente — negociação acontece no WhatsApp, CRM só registra depois</td><td class="center"><span class="pill p-yellow">Cultura Operacional</span></td></tr>
+        <tr><td>Taxas de conversão incomparáveis</td><td>Critérios diferentes de quando o lead "entra" no sistema entre SSA e REC</td><td class="center"><span class="pill p-red">Governança / Protocolo</span></td></tr>
+        <tr><td>Campos vazios em massa (25,9%)</td><td>Dupla digitação planilha→CRM com transferência manual falha</td><td class="center"><span class="pill p-red">Sistema / Arquitetura</span></td></tr>
+        <tr><td>Cards "zumbi" sem desfecho</td><td>Sem governança e dono do dado; sem alertas de inatividade</td><td class="center"><span class="pill p-yellow">Processo / Pessoas</span></td></tr>
+        <tr><td>Pós-alta sem dados (&lt;30%)</td><td>CRM percebido como ferramenta de captação, não de jornada completa</td><td class="center"><span class="pill p-yellow">Cultura Organizacional</span></td></tr>
+        <tr><td>Motivo de perda genérico ou vazio</td><td>Lista com "Outros" muito usada; campo não obrigatório ao fechar caso</td><td class="center"><span class="pill p-blue">Configuração</span></td></tr>
+        <tr><td>Previsão de fechamento sempre vazia</td><td>Campo nunca incorporado ao fluxo — sem utilidade percebida pela equipe</td><td class="center"><span class="pill p-blue">Treinamento / Processo</span></td></tr>
+      </tbody>
+    </table></div></div>
+  </section>
+
+  <!-- ══════════════════════════ LIMITES ══════════════════════════ -->
+  <section id="sec-limites" class="sec">
+    <div class="sh"><div class="sh-title">Limites e Premissas da Análise</div><div class="sh-sub">Explicitar as limitações metodológicas aumenta a credibilidade — o leitor que conhece os limites confia mais nas conclusões que ficam de pé.</div><div class="sh-line"></div></div>
+    <div class="al al-blue" style="margin-bottom:18px;">
+      <div class="al-t">Sobre os recortes temporais deste dossiê</div>
+      <div class="al-tx">Este documento combina bases com recortes complementares, cada uma sinalizada em sua respectiva seção. <strong>CRM (SSA e REC):</strong> exportação de 13/abr/2026, com corte analítico até 31/mar/2026 para as análises de tempo e ciclo. <strong>Pré-Qualificação:</strong> planilha atualizada cobrindo Dez/2025–Abr/2026 (1.400 leads). <strong>Camada de Inteligência Operacional:</strong> base deduplicada de 889 negociações únicas, exportada em 13/abr/2026 com corte operacional até 31/mar/2026. A menção a "exportação de 16/mar/2026" nos limites refere-se à base original do diagnóstico inicial, substituída pela exportação atualizada. Não há contradição entre as datas — há estratificação por fonte e por tipo de análise.</div>
+    </div>
+    <div class="limit-grid">
+      <div class="limit-card"><div><div class="lc-title">Corte Analítico até 31/mar/2026</div><div class="lc-desc">A exportação consolidada é de 13/abr/2026, mas as análises de CRM, tempo de ciclo e camada operacional foram fechadas em 31/mar/2026. Esse recorte foi mantido deliberadamente para preservar comparabilidade e estabilidade analítica — abril está parcialmente representado na base.</div><div class="lc-mitigation">Implicação: leituras de pipeline ativo e tendência mensal devem considerar que abril/2026 não está consolidado nas análises principais.</div></div></div>
+      <div class="limit-card"><div><div class="lc-title">Volume Pré-Qual por Unidade Estimado</div><div class="lc-desc">A planilha não tem campo "unidade" — distribuição SSA/REC é estimada por proporção do CRM.</div><div class="lc-mitigation">Mitigação: Sinalizado como estimativa em todos os usos.</div></div></div>
+      <div class="limit-card"><div><div class="lc-title">Taxas de Conversão Não Comparáveis</div><div class="lc-desc">SSA e REC têm critérios diferentes de entrada no CRM. O gap de 29,4pp pode ser mais efeito de critério do que eficácia real.</div><div class="lc-mitigation">Mitigação: Alertado em todo o material — proposta como Decisão 1.</div></div></div>
+      <div class="limit-card"><div><div class="lc-title">Auditoria de Apenas 8 Casos</div><div class="lc-desc">4 SSA + 4 REC selecionados intencionalmente para representar perfis. Não é amostra estatística.</div><div class="lc-mitigation">Mitigação: Usado para análise qualitativa de padrões — não extrapolado numericamente.</div></div></div>
+      <div class="limit-card"><div><div class="lc-title">Matriz de Essencialidade Autoral</div><div class="lc-desc">Os pesos de "essencial" vs "importante" foram definidos pela equipe de análise, não pelo time operacional.</div><div class="lc-mitigation">Mitigação: Recomendado validar com o time antes de usar como indicador oficial.</div></div></div>
+      <div class="limit-card"><div><div class="lc-title">Dados de Contato Anonimizados</div><div class="lc-desc">Nomes de pacientes usados nos casos individuais — não utilizados na análise quantitativa agregada.</div><div class="lc-mitigation">Mitigação: Análise agregada não depende de identificação individual.</div></div></div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ FUNIL ══════════════════════════ -->
+  <section id="sec-funil" class="sec">
+    <div class="sh"><div class="sh-title">Estrutura do Funil de Avaliação</div><div class="sh-sub">Jornada completa — da Pré-Qualificação (planilha) até a Alta da Unidade (CRM)</div><div class="sh-line"></div></div>
+    <div class="al al-blue"><div class="al-b"><div class="al-t">O Funil Oculto</div><div class="al-tx">O processo começa na Planilha de Controle de Leads (1.400 registros), onde apenas ~22,1% dos leads são direcionados para os funis de Avaliação no RD CRM (187 para SSA + 123 para REC = 310 de 1.400). A grande maioria é descartada antes de entrar no sistema — este fluxo é <strong>invisível</strong> para quem analisa apenas o CRM.</div></div></div>
+    <div class="two-col" style="margin-top:16px;">
+      <div class="cc"><div class="ct">SSA — Funil de Elegibilidade Salvador</div><div class="cd">948 leads no período</div><div class="funnel-wrap" id="funnelSSA"></div></div>
+      <div class="cc"><div class="ct">REC — Funil de Elegibilidade Recife</div><div class="cd">477 leads no período</div><div class="funnel-wrap" id="funnelREC"></div></div>
+    </div>
+    <div class="cc" style="margin-top:8px;"><div class="ct">Canais de Entrada (Pré-Qualificação — 1.400 leads)</div><div class="cd">De onde vêm os leads antes do CRM</div><canvas id="chCanais" height="100"></canvas></div>
+  </section>
+
+  <!-- ══════════════════════════ COMPARATIVO ══════════════════════════ -->
+  <section id="sec-comparativo" class="sec">
+    <div class="sh"><div class="sh-title">Comparativo SSA vs REC</div><div class="sh-sub">Gap analysis campo a campo — o que cada unidade faz melhor e onde está o gap operacional</div><div class="sh-line"></div></div>
+    <div class="kpi-grid">
+      <div class="kc ok"><div class="kl">Conversão SSA</div><div class="kv">81,9%</div><div class="ks">704 vendidas / 860 fechadas</div></div>
+      <div class="kc warn"><div class="kl">Conversão REC</div><div class="kv">52,5%</div><div class="ks">GAP 29,4pp — critérios diferentes!</div></div>
+      <div class="kc danger"><div class="kl">GAP de Conversão</div><div class="kv">29,4pp</div><div class="ks">Provavelmente não é eficácia real</div></div>
+    </div>
+    <div class="cc" style="margin-bottom:20px;"><div class="ct">Gap de Preenchimento — Campos Críticos (SSA vs REC)</div><div class="cd">Percentual de preenchimento — diferença entre unidades</div><div id="cbarChart"></div></div>
+    <div class="two-col">
+      <div class="cc"><div class="ct">Conversão: SSA vs REC</div><div class="cd">Vendida / Perdida / Em Andamento (%)</div><canvas id="chConvComp" height="220"></canvas></div>
+      <div class="cc"><div class="ct">Motivos de Perda — Comparativo</div><div class="cd">Radar por perfil de perda</div><canvas id="chMotivoComp" height="220"></canvas></div>
+    </div>
+    <div class="tc" style="margin-top:8px;">
+      <div class="tc-head"><h3>Gap Analysis Detalhado — Impacto no Negócio</h3></div>
+      <div class="ts"><table>
+        <thead><tr><th>Campo</th><th>SSA</th><th>REC</th><th>Δ</th><th>Impacto no Negócio</th><th>Prioridade</th></tr></thead>
+        <tbody>
+          <tr><td>Fonte (Origem)</td><td class="ssa center mono">0%</td><td class="rec center mono">90%</td><td class="center" style="color:var(--accent)">−90pp</td><td>ROI marketing incalculável em SSA</td><td class="center"><span class="pill p-red">P1</span></td></tr>
+          <tr><td>Particularidades da Neg.</td><td class="ssa center mono">79%</td><td class="rec center mono">11%</td><td class="center" style="color:var(--ok)">+68pp</td><td>Contexto qualitativo perdido em REC</td><td class="center"><span class="pill p-red">P1</span></td></tr>
+          <tr><td>Data do 1º Contato</td><td class="ssa center mono">45%</td><td class="rec center mono">1%</td><td class="center" style="color:var(--ok)">+44pp</td><td>SLA invisível em REC</td><td class="center"><span class="pill p-red">P1</span></td></tr>
+          <tr><td>Empresa Remoção</td><td class="ssa center mono">62%</td><td class="rec center mono">17%</td><td class="center" style="color:var(--ok)">+45pp</td><td>Rastreabilidade logística fraca em REC</td><td class="center"><span class="pill p-yellow">P2</span></td></tr>
+          <tr><td>Motivo de Perda</td><td class="ssa center mono">16%</td><td class="rec center mono">44%</td><td class="center" style="color:var(--accent)">−28pp</td><td>Análise de perdas impossível em SSA</td><td class="center"><span class="pill p-yellow">P2</span></td></tr>
+          <tr><td>Data Admissão</td><td class="ssa center mono">77%</td><td class="rec center mono">49%</td><td class="center" style="color:var(--ok)">+28pp</td><td>Lead time incalculável em REC</td><td class="center"><span class="pill p-yellow">P2</span></td></tr>
+          <tr><td>Classificação Paciente</td><td class="ssa center mono">100%</td><td class="rec center mono">100%</td><td class="center" style="color:var(--ok)">0pp</td><td>—</td><td class="center"><span class="pill p-green">OK</span></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ QUALIDADE ══════════════════════════ -->
+  <section id="sec-qualidade" class="sec">
+    <div class="sh"><div class="sh-title">Qualidade de Dados</div><div class="sh-sub">Aderência por seção, matriz de essencialidade e temporalidade</div><div class="sh-line"></div></div>
+    <div class="two-col">
+      <div class="cc"><div class="ct">Score de Aderência por Seção</div><div class="cd">SSA (azul) vs REC (laranja) — % médio de preenchimento</div><canvas id="chAder" height="280"></canvas></div>
+      <div class="cc"><div class="ct">Distribuição dos Campos por Fill Rate</div><div class="cd">112 campos reais classificados por qualidade</div><canvas id="chFill" height="280"></canvas></div>
+    </div>
+    <div class="tc">
+      <div class="tc-head"><h3>Temporalidade — Problema Estrutural</h3></div>
+      <div class="ts"><table>
+        <thead><tr><th>Campo</th><th>Problema</th><th>Impacto</th><th>Severidade</th></tr></thead>
+        <tbody>
+          <tr><td>Data de Criação do Card</td><td>Cards criados retroativamente (pior caso: 278 dias de defasagem no Conv. Demorado SSA)</td><td>SLA de triagem completamente distorcido</td><td class="center"><span class="pill p-red">CRÍTICO</span></td></tr>
+          <tr><td>Data do 1º Contato</td><td>Vazia em 69,5% global; REC com apenas 1%</td><td>SLA de atendimento impossível de medir</td><td class="center"><span class="pill p-red">CRÍTICO</span></td></tr>
+          <tr><td>Data da Visita</td><td>Preenchida em 5% (SSA) e 0% (REC)</td><td>Lead time avaliação→visita inválido</td><td class="center"><span class="pill p-red">CRÍTICO</span></td></tr>
+          <tr><td>Data Admissão vs Remoção</td><td>Inconsistências lógicas entre as datas em vários registros</td><td>Lead time de internação distorcido</td><td class="center"><span class="pill p-yellow">ALTO</span></td></tr>
+          <tr><td>Data Saída / Pós-Alta</td><td>Abandono sistemático em ambas as unidades</td><td>Tempo de permanência não calculável</td><td class="center"><span class="pill p-yellow">ALTO</span></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ JORNADA DOS CASOS ══════════════════════════ -->
+  <section id="sec-jornada" class="sec">
+    <div class="sh"><div class="sh-title">Jornada Real dos Casos — Arquétipos Operacionais</div><div class="sh-sub">O diagnóstico mostra <em>onde</em> o processo quebra; os arquétipos mostram <em>como</em> e <em>para quem</em> ele quebra mais.</div><div class="sh-line"></div></div>
+
+    <div class="al al-blue"><div class="al-b"><div class="al-t">Nota Metodológica</div><div class="al-tx">8 casos selecionados intencionalmente para representar 4 perfis. Não é amostra estatística. O valor está nos padrões qualitativos revelados — não em extrapolações numéricas.</div></div></div>
+
+    <!-- Arquétipo 1: PARTICULAR -->
+    <div class="arch-card" style="margin-top:20px;">
+      <div class="arch-head">
+        <div class="arch-head-left">
+          <div class="arch-num">Arquétipo 01</div>
+          <div class="arch-name">PARTICULAR</div>
+          <div class="arch-desc">Processo direto, sem burocracia de operadora. Testa a agilidade operacional pura da equipe — sem a variável de autorização de convênio.</div>
+        </div>
+        <div class="arch-badge-wrap"><span class="pill p-blue">2 casos</span><span class="pill p-gray">Score médio: 87/100</span></div>
+      </div>
+      <div class="arch-body">
+        <div class="arch-compare">
+          <div class="arch-unit ssa-unit">
+            <div class="unit-label">SSA — H. Tereza de Lisieux / Caroline Badaro</div>
+            <div class="fact"><span class="lbl">Status:</span><span class="val good">Admitido</span></div>
+            <div class="fact"><span class="lbl">Score:</span><span class="val">86/100</span></div>
+            <div class="fact"><span class="lbl">Ciclo no CRM:</span><span class="val good">5 dias</span></div>
+            <div class="fact"><span class="lbl">Defasagem card:</span><span class="val warn">8 dias após admissão na origem</span></div>
+            <div class="fact"><span class="lbl">Campo Fonte:</span><span class="val bad">VAZIO — origem desconhecida</span></div>
+            <div class="fact"><span class="lbl">Fase Contato:</span><span class="val bad">0/6 campos — SLA invisível</span></div>
+            <div class="fact"><span class="lbl">Triagem / Docs:</span><span class="val good">100% / 92%</span></div>
+          </div>
+          <div class="arch-unit rec-unit">
+            <div class="unit-label">REC — HER / Dr. Jesus Gandara</div>
+            <div class="fact"><span class="lbl">Status:</span><span class="val good">Admitido</span></div>
+            <div class="fact"><span class="lbl">Score:</span><span class="val">88/100</span></div>
+            <div class="fact"><span class="lbl">Ciclo no CRM:</span><span class="val warn">22 dias (longo para particular)</span></div>
+            <div class="fact"><span class="lbl">Parado:</span><span class="val warn">13 dias entre criação e autorização</span></div>
+            <div class="fact"><span class="lbl">Campo Fonte:</span><span class="val good">Indicação Técnica</span></div>
+            <div class="fact"><span class="lbl">Dados de Contato:</span><span class="val good">Presentes</span></div>
+            <div class="fact"><span class="lbl">Triagem / Docs:</span><span class="val good">100% / 100%</span></div>
+          </div>
+        </div>
+        <div class="arch-insight">
+          <div class="ai-label">O que este arquétipo ensina</div>
+          <div class="ai-text">SSA é rápido, mas cego — executa bem a internação mas não sabe de onde veio o paciente. REC é transparente na origem, mas apresentou lentidão operacional inesperada. A lentidão de 22 dias em REC para um caso particular (sem burocracia de operadora) merece investigação. Os 13 dias sem registro de ação no CRM <em>indicam</em> ausência de follow-up ativo — ou o processo avançou fora do sistema, o que aponta para o padrão de uso retroativo do CRM identificado na análise agregada.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Arquétipo 2: CONVÊNIO RÁPIDO -->
+    <div class="arch-card">
+      <div class="arch-head">
+        <div class="arch-head-left">
+          <div class="arch-num">Arquétipo 02</div>
+          <div class="arch-name">CONVÊNIO RÁPIDO</div>
+          <div class="arch-desc">Operadora aprova avaliação e implantação com agilidade. Referência interna de processo — mostra o que é possível quando o fluxo funciona bem.</div>
+        </div>
+        <div class="arch-badge-wrap"><span class="pill p-blue">2 casos</span><span class="pill p-green">Score médio: 89/100 · Melhor do grupo</span></div>
+      </div>
+      <div class="arch-body">
+        <div class="arch-compare">
+          <div class="arch-unit ssa-unit">
+            <div class="unit-label">SSA — Domicílio / Lucas Khun (Bradesco)</div>
+            <div class="fact"><span class="lbl">Status:</span><span class="val good">Alta da Unidade</span></div>
+            <div class="fact"><span class="lbl">Score:</span><span class="val good">91/100 — MELHOR DO GRUPO</span></div>
+            <div class="fact"><span class="lbl">Ciclo no CRM:</span><span class="val good">1 dia (admissão no mesmo dia)</span></div>
+            <div class="fact"><span class="lbl">Data 1º Contato:</span><span class="val good">Registrado: 14/01 às 16h13</span></div>
+            <div class="fact"><span class="lbl">Documentação:</span><span class="val good">100% anexada</span></div>
+            <div class="fact"><span class="lbl">Campo Fonte:</span><span class="val bad">VAZIO — única falha relevante</span></div>
+            <div class="fact"><span class="lbl">Jornada completa?</span><span class="val good">SIM — único caso com saída registrada</span></div>
+          </div>
+          <div class="arch-unit rec-unit">
+            <div class="unit-label">REC — RHP / Dr. Thiago Oliveira (Fachesf)</div>
+            <div class="fact"><span class="lbl">Status:</span><span class="val good">Admitido</span></div>
+            <div class="fact"><span class="lbl">Score:</span><span class="val">87/100</span></div>
+            <div class="fact"><span class="lbl">Ciclo no CRM:</span><span class="val good">1 dia</span></div>
+            <div class="fact"><span class="lbl">Campo Fonte:</span><span class="val good">Hospital/Clínica</span></div>
+            <div class="fact"><span class="lbl">Dados de Contato:</span><span class="val good">Completos</span></div>
+            <div class="fact"><span class="lbl">Empresa Remoção:</span><span class="val good">SOS registrada</span></div>
+            <div class="fact"><span class="lbl">Financeiro Resp.:</span><span class="val warn">VAZIO — essencial p/ faturamento</span></div>
+          </div>
+        </div>
+        <div class="arch-insight">
+          <div class="ai-label">O que este arquétipo ensina</div>
+          <div class="ai-text">Quando o processo flui bem, os dados são excelentes naturalmente. O gap de Fonte em SSA não é operacional — é estrutural (campo não configurado como obrigatório). Prova que o time sabe usar o CRM quando o processo exige. Foco deve ser em processo e configuração, não em cobrança de preenchimento.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Arquétipo 3: CONVÊNIO DEMORADO -->
+    <div class="arch-card">
+      <div class="arch-head">
+        <div class="arch-head-left">
+          <div class="arch-num">Arquétipo 03</div>
+          <div class="arch-name">CONVÊNIO DEMORADO</div>
+          <div class="arch-desc">Negociação complexa — liminar judicial, convênio difícil ou complexidade clínica. Distorce médias de lead time e testa a disciplina de atualização do CRM ao longo do tempo.</div>
+        </div>
+        <div class="arch-badge-wrap"><span class="pill p-blue">2 casos</span><span class="pill p-yellow">Atenção: distorce médias</span></div>
+      </div>
+      <div class="arch-body">
+        <div class="arch-compare">
+          <div class="arch-unit ssa-unit">
+            <div class="unit-label">SSA — H. Prohope / Yasmin Bitar (Unimed — Liminar)</div>
+            <div class="fact"><span class="lbl">Status:</span><span class="val good">Admitido</span></div>
+            <div class="fact"><span class="lbl">Score:</span><span class="val good">91/100</span></div>
+            <div class="fact"><span class="lbl">Ciclo no CRM:</span><span class="val warn">63 dias (caso de liminar judicial)</span></div>
+            <div class="fact"><span class="lbl">Lead time captação:</span><span class="val bad">278 dias! (origem mai/2025, card dez/2025)</span></div>
+            <div class="fact"><span class="lbl">Triagem / Aval / Log.:</span><span class="val good">100% em todas as fases</span></div>
+            <div class="fact"><span class="lbl">Particularidades:</span><span class="val good">Contexto da liminar documentado</span></div>
+            <div class="fact"><span class="lbl">Campo Fonte:</span><span class="val bad">VAZIO (padrão SSA)</span></div>
+          </div>
+          <div class="arch-unit rec-unit">
+            <div class="unit-label">REC — De Ávila / Dr. José Neto (Saúde Recife)</div>
+            <div class="fact"><span class="lbl">Status:</span><span class="val good">Admitido</span></div>
+            <div class="fact"><span class="lbl">Score:</span><span class="val">88/100</span></div>
+            <div class="fact"><span class="lbl">Ciclo no CRM:</span><span class="val warn">14 dias (arrastado sem justificativa clara)</span></div>
+            <div class="fact"><span class="lbl">Lead time captação:</span><span class="val">24 dias</span></div>
+            <div class="fact"><span class="lbl">Particularidades:</span><span class="val good">Excelente — família e convênio detalhados</span></div>
+            <div class="fact"><span class="lbl">Documentação:</span><span class="val good">100%</span></div>
+            <div class="fact"><span class="lbl">Fonte:</span><span class="val good">Preenchida</span></div>
+          </div>
+        </div>
+        <div class="arch-insight">
+          <div class="ai-label">O que este arquétipo ensina</div>
+          <div class="ai-text">Casos de liminar e convênios complexos devem ser <strong>filtrados</strong> ao calcular SLAs e lead times médios — um único caso de 278 dias distorce qualquer média global. Importante: apesar da complexidade extrema (liminar judicial), SSA manteve 91/100 de qualidade de dado. Quando o caso é complexo, a disciplina de registro sobe — a hipótese mais provável é que a ausência de processo para registro em tempo real — e não o descuido — explica os gaps em casos de menor complexidade.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Arquétipo 4: NÃO ADMITIDO -->
+    <div class="arch-card">
+      <div class="arch-head">
+        <div class="arch-head-left">
+          <div class="arch-num">Arquétipo 04</div>
+          <div class="arch-name">NÃO ADMITIDO</div>
+          <div class="arch-desc">Casos que não resultaram em internação. O teste mais crítico de maturidade operacional — revela se a equipe sabe fechar um ciclo corretamente e aprender com a perda.</div>
+        </div>
+        <div class="arch-badge-wrap"><span class="pill p-blue">2 casos</span><span class="pill p-red">Maior divergência entre unidades</span></div>
+      </div>
+      <div class="arch-body">
+        <div class="arch-compare">
+          <div class="arch-unit ssa-unit">
+            <div class="unit-label">SSA — HA / Ana Paula Alcantara (Bradesco)</div>
+            <div class="fact"><span class="lbl">Status:</span><span class="val bad">EM ANDAMENTO — card "zumbi"!</span></div>
+            <div class="fact"><span class="lbl">Score:</span><span class="val">83/100 (nota alta, completude baixa)</span></div>
+            <div class="fact"><span class="lbl">Completude real:</span><span class="val bad">44,1% (30/68 campos)</span></div>
+            <div class="fact"><span class="lbl">Motivo de Perda:</span><span class="val bad">NÃO PREENCHIDO</span></div>
+            <div class="fact"><span class="lbl">Etapa:</span><span class="val warn">Pré-Implantação — parado há meses</span></div>
+            <div class="fact"><span class="lbl">Logística / Admissão:</span><span class="val">0% (esperado para não admitido)</span></div>
+            <div class="fact"><span class="lbl">Impacto:</span><span class="val bad">Polui o funil, distorce taxas</span></div>
+          </div>
+          <div class="arch-unit rec-unit">
+            <div class="unit-label">REC — RHP / Dra. Lívia Interaminense</div>
+            <div class="fact"><span class="lbl">Status:</span><span class="val good">PERDIDA — desfecho correto</span></div>
+            <div class="fact"><span class="lbl">Score:</span><span class="val warn">71/100 — menor do grupo</span></div>
+            <div class="fact"><span class="lbl">Ciclo:</span><span class="val good">2 dias — fechado rapidamente</span></div>
+            <div class="fact"><span class="lbl">Motivo de Perda:</span><span class="val good">"Família optou por Hospital"</span></div>
+            <div class="fact"><span class="lbl">Anotação:</span><span class="val good">"Valor da diária/orçamento"</span></div>
+            <div class="fact"><span class="lbl">Qualidade desfecho:</span><span class="val good">Referência interna — modelo para SSA</span></div>
+            <div class="fact"><span class="lbl">Impacto:</span><span class="val good">Dado estratégico — sabe por que perdeu</span></div>
+          </div>
+        </div>
+        <div class="arch-insight" style="border-color:rgba(229,57,53,.2);background:rgba(229,57,53,.04)">
+          <div class="ai-label" style="color:var(--accent)">O que este arquétipo ensina</div>
+          <div class="ai-text">Esta é a maior divergência de maturidade operacional entre as unidades. REC apresenta <strong>maior disciplina no registro de desfechos negativos</strong>: fecha o caso, registra o motivo, deixa anotação qualitativa — dados que permitem aprender com a perda. SSA deixa o card "zumbi": aberto, sem motivo, sem desfecho. <strong>Recomendação:</strong> SSA deve adotar o protocolo de REC para fechamento de casos perdidos imediatamente.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Padrões transversais -->
+    <div class="sh" style="margin-top:8px;"><div class="sh-title" style="font-size:20px;">5 Padrões Transversais — O que os 4 Arquétipos Revelam Juntos</div><div class="sh-line"></div></div>
+    <div class="insight-grid">
+      <div class="ins-card"><div class="in">01</div><div class="it">A jornada piora no início, melhora na admissão e deteriora na saída</div><div class="ix">Contato: 0% em 6/8 casos. Triagem/Admissão: 88-100%. Pós-Alta: &lt;30%. O dado é consistente com a hipótese de que o CRM tende a ser ativado quando a internação está praticamente garantida — funcionando mais como registro de desfecho do que como ferramenta de gestão do funil.</div></div>
+      <div class="ins-card"><div class="in">02</div><div class="it">Admitidos são muito mais documentados que perdidos</div><div class="ix">Completude média admitidos: 76-91%. Não admitidos: 44-72%. A documentação segue o resultado, não o processo — inverte a lógica de gestão.</div></div>
+      <div class="ins-card"><div class="in">03</div><div class="it">O gap de Fonte em SSA é estrutural, não operacional</div><div class="ix">Presente em 100% dos casos SSA auditados — inclusive no melhor (91/100). Não resolve com treinamento. Exige configuração de campo obrigatório.</div></div>
+      <div class="ins-card"><div class="in">04</div><div class="it">Cada unidade tem sua fortaleza — padronização deve cruzar boas práticas</div><div class="ix">REC: referência interna em registro de desfechos negativos. SSA: referência em jornada de admissão. Alinhar pelo mínimo é desperdiçar as melhores práticas de cada uma.</div></div>
+      <div class="ins-card"><div class="in">05</div><div class="it">Quando o processo flui, os dados fluem — o problema é processo, não pessoas</div><div class="ix">Convênio Rápido nas duas unidades tem 87-91/100. Isso <em>indica</em> que a equipe tem capacidade de uso do CRM quando o processo cria esse hábito naturalmente — o que aponta para processo e configuração como alavancas mais efetivas do que a cobrança direta.</div></div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ PRÉ-QUAL ══════════════════════════ -->
+  <section id="sec-prequal" class="sec">
+    <div class="sh"><div class="sh-title">Funil de Pré-Qualificação</div><div class="sh-sub">O "funil oculto" antes do RD CRM — 1.400 leads que a análise do CRM sozinha não enxerga</div><div class="sh-line"></div></div>
+    <div class="kpi-grid">
+      <div class="kc"><div class="kl">Total Pré-Qual — Base Atual</div><div class="kv">1.400</div><div class="ks">Dez/2025 a Abr/2026 — base atualizada</div></div>
+      <div class="kc warn"><div class="kl">→ Avaliação SSA</div><div class="kv">187</div><div class="ks">13,4% do total (incl. correção ortográfica)</div></div>
+      <div class="kc warn"><div class="kl">→ Avaliação REC</div><div class="kv">123</div><div class="ks">8,8% do total</div></div>
+      <div class="kc danger"><div class="kl">Não Encaminhados</div><div class="kv">298</div><div class="ks">21,3% — encerrados antes do direcionamento</div></div>
+      <div class="kc danger"><div class="kl">Convênio Não Informado</div><div class="kv">52%</div><div class="ks">714 de 1.400 leads</div></div>
+    </div>
+    <div class="cg">
+      <div class="cc">
+  <div class="ct">Direcionamento dos Leads</div>
+  <div class="cd">Para onde vão os 1.400 leads captados</div>
+  <canvas id="chDir" height="240"></canvas>
+  <div style="margin-top:12px;padding:10px 12px;background:var(--bg3);border-radius:7px;border:1px solid var(--border);font-size:11px;color:var(--text2);line-height:1.65;">
+    <strong style="color:var(--text);">Sobre os "Não Encaminhados" (298):</strong> este volume corresponde aos leads cujo campo Desfecho registra explicitamente "Não Encaminhado" — ou seja, casos formalmente recusados ou encerrados antes de qualquer direcionamento. Eles integram a fatia <em>Não se Aplica</em> do gráfico (824), que agrupa todos os leads sem encaminhamento à Avaliação, independentemente do motivo registrado.
+  </div>
+</div>
+      <div class="cc"><div class="ct">Volume Mensal — Pré-Qualificação</div><div class="cd">Dez/25 a Abr/26 · pico em Jan: 778 leads</div><canvas id="chPreQualMes" height="240"></canvas></div>
+      <div class="cc"><div class="ct">Convênios mais Frequentes</div><div class="cd">Top 8 operadoras identificadas</div><canvas id="chConv" height="240"></canvas></div>
+    </div>
+
+    <div class="sh" style="margin-top:20px;"><div class="sh-title" style="font-size:18px;">Origem de Aquisição — Onde a Florence é encontrada</div><div class="sh-line"></div></div>
+    <div class="al al-yellow"><div class="al-b"><div class="al-t">65,9% dos leads sem origem identificada</div><div class="al-tx">923 de 1.400 leads têm Origem como "Não Informado" — o que limita qualquer análise de ROI por canal. Dos 34,1% com origem identificada, Indicação (Pessoa) é o canal mais relevante, seguida de Pesquisa Google orgânica. Isso sugere que a reputação e o boca-a-boca ainda são os principais motores de captação da Florence.</div></div></div>
+    <div class="tc" style="margin-top:12px;">
+      <div class="tc-head"><h3>Canais de Origem — 1.400 Leads (principais categorias + não informado)</h3></div>
+      <div class="ts"><table>
+        <thead><tr><th>Canal de Origem</th><th>Volume</th><th>% do Total</th><th>% dos Informados</th><th>Natureza</th></tr></thead>
+        <tbody>
+          <tr><td>Indicação (Pessoa)</td><td class="mono center">112</td><td class="mono center">8,0%</td><td class="mono center">23,5%</td><td><span class="pill p-green">Boca a Boca</span></td></tr>
+          <tr><td>Pesquisas Google (orgânico)</td><td class="mono center">86</td><td class="mono center">6,1%</td><td class="mono center">18,0%</td><td><span class="pill p-blue">Digital Orgânico</span></td></tr>
+          <tr><td>Profissional de Saúde</td><td class="mono center">33</td><td class="mono center">2,4%</td><td class="mono center">6,9%</td><td><span class="pill p-green">Indicação Técnica</span></td></tr>
+          <tr><td>Redes Sociais</td><td class="mono center">27</td><td class="mono center">1,9%</td><td class="mono center">5,7%</td><td><span class="pill p-blue">Digital Orgânico</span></td></tr>
+          <tr><td>Google ADS (pago)</td><td class="mono center">9</td><td class="mono center">0,6%</td><td class="mono center">1,9%</td><td><span class="pill p-yellow">Mídia Paga</span></td></tr>
+          <tr><td>Meta ADS</td><td class="mono center">2</td><td class="mono center">0,1%</td><td class="mono center">0,4%</td><td><span class="pill p-yellow">Mídia Paga</span></td></tr>
+          <tr><td>Outros canais não mapeados</td><td class="mono center">208</td><td class="mono center">14,9%</td><td class="mono center">43,6%</td><td><span class="pill p-gray">Não Mapeado</span></td></tr>
+          <tr><td><strong>NÃO INFORMADO</strong></td><td class="mono center"><strong>923</strong></td><td class="mono center"><strong>65,9%</strong></td><td class="mono center">—</td><td><span class="pill p-red">Gap Crítico</span></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="sh" style="margin-top:20px;"><div class="sh-title" style="font-size:18px;">Barreiras para Conversão Imediata</div><div class="sh-line"></div></div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">Principais razões pelas quais leads não avançam para o funil — informação capturada apenas na Pré-Qualificação.</p>
+    <div class="tc">
+      <div class="ts"><table>
+        <thead><tr><th>Barreira</th><th>Volume</th><th>% da base (1.400)</th><th>Implicação Estratégica</th></tr></thead>
+        <tbody>
+          <tr><td>Não Elegível (perfil fora do escopo)</td><td class="mono center">116</td><td class="mono center">8,3%</td><td>Indica que parte dos leads captados pelos canais está fora do perfil Florence — possível ajuste no targeting de marketing</td></tr>
+          <tr><td>Financeiro (custo/convênio)</td><td class="mono center">47</td><td class="mono center">3,4%</td><td>Barreira recorrente que sugere oportunidade de comunicação mais clara de opções de pagamento e convênios aceitos</td></tr>
+          <tr><td>Geográfico (localização)</td><td class="mono center">22</td><td class="mono center">1,6%</td><td>Leads de regiões sem cobertura — sugere potencial de expansão ou parceria logística</td></tr>
+          <tr><td>Indecisão da Família</td><td class="mono center">14</td><td class="mono center">1,0%</td><td>Aponta para oportunidade de follow-up consultivo — não é uma perda definitiva</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="al al-blue" style="margin-top:16px;"><div class="al-b"><div class="al-t">Escopo Histórico Completo — Florence captura leads desde Jul/2025</div><div class="al-tx">A planilha de Pré-Qualificação inclui dados históricos desde julho de 2025: <strong>914 leads</strong> (Jul-Out/25) + <strong>756 leads</strong> (Nov-Dez/25) + <strong>1.347 leads</strong> (Jan-Abr/26, excluindo os 53 de Dez/25 já contabilizados acima) = <strong>~3.017 leads únicos</strong> ao longo de aproximadamente 10 meses. Apenas uma fração pequena deste volume (~22%) aparece no RD CRM como lead direcionado para Avaliação. Destaque: janeiro/2026 registrou o pico histórico com <strong>778 leads em um único mês</strong> — o que merece investigação sobre qual evento ou campanha gerou este volume.</div></div></div>
+  </section>
+
+  <!-- ══════════════════════════ INDICADORES ══════════════════════════ -->
+  <section id="sec-indicadores" class="sec">
+    <div class="sh"><div class="sh-title">Estruturação de Indicadores</div><div class="sh-sub">Disponibilidade atual + impacto de negócio + indicadores adicionais sugeridos</div><div class="sh-line"></div></div>
+    <div class="cc" style="margin-bottom:22px;"><div class="ct">Status dos Indicadores Desejados pelo Time</div><div class="cd">Disponível / Parcial / Indisponível</div><canvas id="chKPIst" height="100"></canvas></div>
+
+    <div style="background:rgba(0,137,123,.06);border:1px solid rgba(0,137,123,.25);border-radius:12px;padding:20px;margin-bottom:24px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;"><div><div style="font-family:'DM Serif Display',serif;font-size:16px;font-weight:700;color:var(--purple)">Cesta Mínima — Indicadores Essenciais para Governança 2026</div><div style="font-size:12px;color:var(--muted);margin-top:2px">Estes 10 indicadores formam o painel mínimo viável para gestão da área de Avaliação. Antes de medir qualquer outra coisa, estes precisam funcionar.</div></div></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;">
+        <div style="background:rgba(0,137,123,.06);border:1px solid rgba(0,137,123,.15);border-radius:8px;padding:12px;display:flex;align-items:flex-start;gap:10px;"><div style="width:8px;height:8px;border-radius:50%;background:var(--ok);flex-shrink:0;margin-top:4px"></div><div><div style="font-size:12px;font-weight:600;color:var(--text)">Taxa de Conversão por Unidade</div><div style="font-size:11px;color:var(--muted)">Após padronizar critério de entrada (Decisão 1)</div></div></div>
+        <div style="background:rgba(245,124,0,.06);border:1px solid rgba(245,124,0,.15);border-radius:8px;padding:12px;display:flex;align-items:flex-start;gap:10px;"><div style="width:8px;height:8px;border-radius:50%;background:var(--warn);flex-shrink:0;margin-top:4px"></div><div><div style="font-size:12px;font-weight:600;color:var(--text)">Taxa de Perda por Motivo</div><div style="font-size:11px;color:var(--muted)">Requer lista fechada sem "Outros"</div></div></div>
+        <div style="background:rgba(229,57,53,.06);border:1px solid rgba(229,57,53,.15);border-radius:8px;padding:12px;display:flex;align-items:flex-start;gap:10px;"><div style="width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:4px"></div><div><div style="font-size:12px;font-weight:600;color:var(--text)">SLA de 1º Contato</div><div style="font-size:11px;color:var(--muted)">Requer Data 1º Contato obrigatório (Decisão 2)</div></div></div>
+        <div style="background:rgba(229,57,53,.06);border:1px solid rgba(229,57,53,.15);border-radius:8px;padding:12px;display:flex;align-items:flex-start;gap:10px;"><div style="width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:4px"></div><div><div style="font-size:12px;font-weight:600;color:var(--text)">Lead Time Avaliação → Admissão</div><div style="font-size:11px;color:var(--muted)">Requer registro em tempo real (excluir liminares das médias)</div></div></div>
+        <div style="background:rgba(0,137,123,.06);border:1px solid rgba(0,137,123,.15);border-radius:8px;padding:12px;display:flex;align-items:flex-start;gap:10px;"><div style="width:8px;height:8px;border-radius:50%;background:var(--ok);flex-shrink:0;margin-top:4px"></div><div><div style="font-size:12px;font-weight:600;color:var(--text)">Taxa de Estacionamento</div><div style="font-size:11px;color:var(--muted)">Disponível hoje com dados atuais</div></div></div>
+        <div style="background:rgba(229,57,53,.06);border:1px solid rgba(229,57,53,.15);border-radius:8px;padding:12px;display:flex;align-items:flex-start;gap:10px;"><div style="width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:4px"></div><div><div style="font-size:12px;font-weight:600;color:var(--text)">Índice de Fuga Pré-CRM</div><div style="font-size:11px;color:var(--muted)">Requer integração Pré-Qual → CRM</div></div></div>
+        <div style="background:rgba(245,124,0,.06);border:1px solid rgba(245,124,0,.15);border-radius:8px;padding:12px;display:flex;align-items:flex-start;gap:10px;"><div style="width:8px;height:8px;border-radius:50%;background:var(--warn);flex-shrink:0;margin-top:4px"></div><div><div style="font-size:12px;font-weight:600;color:var(--text)">Score de Qualidade do Card</div><div style="font-size:11px;color:var(--muted)">Requer Matriz de Essencialidade validada com o time</div></div></div>
+        <div style="background:rgba(229,57,53,.06);border:1px solid rgba(229,57,53,.15);border-radius:8px;padding:12px;display:flex;align-items:flex-start;gap:10px;"><div style="width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:4px"></div><div><div style="font-size:12px;font-weight:600;color:var(--text)">Tempo Médio de Permanência</div><div style="font-size:11px;color:var(--muted)">Requer Data Saída obrigatória pós-alta</div></div></div>
+        <div style="background:rgba(229,57,53,.06);border:1px solid rgba(229,57,53,.15);border-radius:8px;padding:12px;display:flex;align-items:flex-start;gap:10px;"><div style="width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:4px"></div><div><div style="font-size:12px;font-weight:600;color:var(--text)">NPS Saída</div><div style="font-size:11px;color:var(--muted)">Requer ativação de workflow no CRM (Decisão 5)</div></div></div>
+        <div style="background:rgba(229,57,53,.06);border:1px solid rgba(229,57,53,.15);border-radius:8px;padding:12px;display:flex;align-items:flex-start;gap:10px;"><div style="width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:4px"></div><div><div style="font-size:12px;font-weight:600;color:var(--text)">Taxa de Rastreabilidade Ponta a Ponta</div><div style="font-size:11px;color:var(--muted)">Requer integração Pré-Qual → CRM</div></div></div>
+      </div>
+      <div style="margin-top:12px;font-size:11px;color:var(--muted);padding-top:10px;border-top:1px solid rgba(255,255,255,.06)"><span style="color:var(--purple);font-weight:700">Verde</span> = disponível hoje &nbsp;|&nbsp; <span style="color:var(--warn);font-weight:700">Amarelo</span> = disponível com ajuste de processo &nbsp;|&nbsp; <span style="color:var(--accent);font-weight:700">Vermelho</span> = requer ação estrutural</div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showTab('ti-all')">Todos</button>
+      <button class="tab-btn" onclick="showTab('ti-disp')">Disponível (3)</button>
+      <button class="tab-btn" onclick="showTab('ti-parc')">Parcial (5)</button>
+      <button class="tab-btn" onclick="showTab('ti-ind')">Indisponível (5)</button>
+      <button class="tab-btn" onclick="showTab('ti-sug')">Sugeridos (10)</button>
+    </div>
+    <div id="ti-all" class="tab-pane active">
+      <div class="tc"><div class="ts"><table>
+        <thead><tr><th>Indicador</th><th>Disponível</th><th>Qualidade</th><th>Impacto se Não Medido</th><th>Ação</th></tr></thead>
+        <tbody>
+          <tr><td>Taxa de Conversão por Unidade</td><td class="center"><span class="pill p-yellow">Parcial</span></td><td>MÉDIA</td><td>Comparativo inválido; metas sem base real</td><td>Padronizar critério entrada</td></tr>
+          <tr><td>Volume de Leads por Mês</td><td class="center"><span class="pill p-green">Sim</span></td><td>BOA</td><td>—</td><td>Nenhuma</td></tr>
+          <tr><td>Taxa de Perda por Motivo</td><td class="center"><span class="pill p-yellow">Parcial</span></td><td>RUIM</td><td>Impossível reduzir perdas sem saber os motivos</td><td>Campo obrigatório</td></tr>
+          <tr><td>SLA de Primeiro Contato</td><td class="center"><span class="pill p-red">Não</span></td><td>ZERO</td><td>Equipe pode levar horas ou dias — ninguém sabe</td><td>Obrigar Data 1º Contato</td></tr>
+          <tr><td>Lead Time Avaliação → Admissão</td><td class="center"><span class="pill p-yellow">Parcial</span></td><td>RUIM</td><td>Ciclo real desconhecido; planejamento prejudicado</td><td>Registro tempo real</td></tr>
+          <tr><td>Taxa de Visita Pós-Contato</td><td class="center"><span class="pill p-red">Não</span></td><td>ZERO</td><td>Atividade de visita completamente invisível</td><td>Workflow de visita</td></tr>
+          <tr><td>Conversão por Canal (Fonte)</td><td class="center"><span class="pill p-red">SSA</span></td><td>CRÍTICO em SSA</td><td>Budget de marketing sem direção em SSA</td><td>Campo Fonte obrigatório</td></tr>
+          <tr><td>Taxa de Autorização</td><td class="center"><span class="pill p-green">Sim</span></td><td>BOA (&gt;80% SSA)</td><td>—</td><td>Nenhuma em SSA</td></tr>
+          <tr><td>Perfil de Pacientes Admitidos</td><td class="center"><span class="pill p-green">Sim</span></td><td>BOA</td><td>—</td><td>Nenhuma</td></tr>
+          <tr><td>NPS Entrada / Saída</td><td class="center"><span class="pill p-red">Não</span></td><td>ZERO</td><td>Satisfação da família invisível — risco reputacional</td><td>Ativar coleta NPS</td></tr>
+          <tr><td>Tempo Médio de Permanência</td><td class="center"><span class="pill p-red">Não</span></td><td>ZERO</td><td>Gestão de leitos sem parâmetro real</td><td>Obrigar Data Saída</td></tr>
+          <tr><td>Ocupação e Giro de Leito</td><td class="center"><span class="pill p-yellow">Parcial</span></td><td>MÉDIA</td><td>Previsão de ocupação imprecisa</td><td>Padronizar campo Leito</td></tr>
+          <tr><td>Taxa de Parecer Técnico</td><td class="center"><span class="pill p-yellow">Parcial</span></td><td>MÉDIA</td><td>Compliance clínico incompleto em REC</td><td>Melhorar preenchimento</td></tr>
+        </tbody>
+      </table></div></div>
+    </div>
+    <div id="ti-disp" class="tab-pane"><div class="al al-green"><div class="al-b"><div class="al-t">3 Indicadores disponíveis hoje</div><div class="al-tx">Volume de Leads por Mês, Taxa de Autorização e Perfil de Pacientes Admitidos. Dados confiáveis — podem ser usados imediatamente.</div></div></div></div>
+    <div id="ti-parc" class="tab-pane"><div class="al al-yellow"><div class="al-b"><div class="al-t">5 Indicadores parcialmente disponíveis</div><div class="al-tx">Taxa de Conversão, Taxa de Perda, Lead Time, Ocupação/Giro de Leito e Parecer Técnico. Dados existem mas com qualidade insuficiente para decisão — precisam de melhoria de processo.</div></div></div></div>
+    <div id="ti-ind" class="tab-pane"><div class="al al-red"><div class="al-b"><div class="al-t">5 Indicadores completamente indisponíveis</div><div class="al-tx">SLA 1º Contato, Taxa de Visita, Conversão por Canal (SSA), NPS e Tempo de Permanência. Todos dependem de ações específicas de configuração ou integração para serem ativados.</div></div></div></div>
+    <div id="ti-sug" class="tab-pane">
+      <div class="insight-grid">
+        <div class="ins-card"><div class="in">01</div><div class="it">Score de Qualidade do Card</div><div class="ix">Campos essenciais preenchidos / total aplicável × 100. Mede disciplina operacional por responsável — identifica quem precisa de suporte.</div></div>
+        <div class="ins-card"><div class="in">02</div><div class="it">Índice de Fuga Pré-CRM</div><div class="ix">(Leads planilha – Leads CRM) / Leads planilha. Quantifica leads perdidos antes de entrar no sistema. Exige integração para viabilizar.</div></div>
+        <div class="ins-card"><div class="in">03</div><div class="it">Taxa de Estacionamento</div><div class="ix">Leads em estacionamento / total leads ativos. Identifica gargalos de pipeline. Disponível hoje com os dados atuais.</div></div>
+        <div class="ins-card"><div class="in">04</div><div class="it">Tempo de Resposta ao Lead (SLA)</div><div class="ix">Data 1º Contato – Data Criação do Card. SLA real de atendimento. Depende da Decisão 2 (campo obrigatório).</div></div>
+        <div class="ins-card"><div class="in">05</div><div class="it">Taxa de Rejeição por Operadora</div><div class="ix">Negativas por operadora / total de leads daquela operadora. Subsidia negociação com operadoras problemáticas.</div></div>
+        <div class="ins-card"><div class="in">06</div><div class="it">Eficiência de Conversão por Avaliador</div><div class="ix">Admitidos por responsável / total leads do responsável. Identifica boas práticas e necessidades de apoio. Disponível hoje.</div></div>
+        <div class="ins-card"><div class="in">07</div><div class="it">Lead Decay Rate</div><div class="ix">Leads sem atualização &gt;30 dias / total ativos. Alerta de abandono de leads. Exige workflow de alerta no CRM.</div></div>
+        <div class="ins-card"><div class="in">08</div><div class="it">CAC por Canal (Custo de Captação)</div><div class="ix">Investimento por canal / admitidos originados por aquele canal. Viável apenas após Fonte ser corrigida em SSA.</div></div>
+        <div class="ins-card"><div class="in">09</div><div class="it">Taxa de Rastreabilidade Ponta a Ponta</div><div class="ix">Leads com jornada completa (Pré-Qual → Admissão) / total leads. Mede visibilidade da Florence sobre o funil completo.</div></div>
+        <div class="ins-card"><div class="in">10</div><div class="it">Taxa de Liminar / Complexidade Jurídica</div><div class="ix">Leads com "Liminar" / total convênio. Identifica carga jurídica por unidade. Disponível hoje em SSA (Classif. Contratação bem preenchida).</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ PADRONIZAÇÃO ══════════════════════════ -->
+  <section id="sec-padronizacao" class="sec">
+    <div class="sh"><div class="sh-title">Proposta de Padronização Operacional</div><div class="sh-sub">Campos críticos com fonte de verdade, quem preenche e regra de preenchimento — base de um mini-manual operacional</div><div class="sh-line"></div></div>
+    <div class="tc">
+      <div class="tc-head"><h3>Regras Operacionais por Campo Crítico</h3></div>
+      <div class="ts"><table>
+        <thead><tr><th>Campo</th><th>Etapa Mínima</th><th>Obrigatório?</th><th>Fonte de Verdade</th><th>Quem Preenche</th><th>Regra de Preenchimento</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Fonte</strong></td><td>Elegibilidade</td><td class="center"><span class="pill p-red">SIM — bloqueio</span></td><td>Pré-Qual ou 1º registro no CRM</td><td>Responsável pelo card</td><td>Lista fechada: WhatsApp | Google Ads | Indicação Médica | Paciente Anterior | Recepção | Fale Conosco | Outros. Não aceitar vazio.</td></tr>
+          <tr><td><strong>Data do 1º Contato</strong></td><td>Elegibilidade</td><td class="center"><span class="pill p-red">SIM — bloqueio</span></td><td>Evento real do contato</td><td>Responsável — no momento, não retroativo</td><td>Data e hora do primeiro contato efetivo. Não pode ser retroativa (&gt;24h sem justificativa).</td></tr>
+          <tr><td><strong>Linha de Cuidado</strong></td><td>Avaliação</td><td class="center"><span class="pill p-red">SIM</span></td><td>Avaliação clínica</td><td>Avaliador responsável</td><td>Lista: Psiquiatria | Paliativos | Reabilitação | Geriatria | Outros. Obrigatório ao entrar em Avaliação.</td></tr>
+          <tr><td><strong>Data da Visita</strong></td><td>Avaliação</td><td class="center"><span class="pill p-yellow">COND.</span></td><td>Evento real da visita</td><td>Avaliador que realizou</td><td>Obrigatório quando "Houve Visita = Sim". Preencher no mesmo dia.</td></tr>
+          <tr><td><strong>Emissão Parecer Técnico</strong></td><td>Avaliação</td><td class="center"><span class="pill p-red">SIM</span></td><td>Documento emitido</td><td>Avaliador responsável</td><td>Data + responsável. Obrigatório ao avançar para Pré-Implantação.</td></tr>
+          <tr><td><strong>Motivo de Perda</strong></td><td>Qualquer etapa</td><td class="center"><span class="pill p-red">SIM — ao fechar</span></td><td>Avaliação do responsável</td><td>Dono do card no fechamento</td><td>Lista fechada sem "Outros". Anotação obrigatória para top 3 motivos. Não pode ficar vazio se Status = Perdida.</td></tr>
+          <tr><td><strong>Previsão de Fechamento</strong></td><td>Avaliação</td><td class="center"><span class="pill p-red">SIM</span></td><td>Estimativa do responsável</td><td>Responsável pelo card</td><td>Data estimada de admissão. Atualizar ao mudar de etapa. Essencial para gestão de pipeline.</td></tr>
+          <tr><td><strong>Data Admissão</strong></td><td>Admissão</td><td class="center"><span class="pill p-red">SIM</span></td><td>Evento real da admissão</td><td>Responsável pela Admissão</td><td>Data real de chegada. Preencher no mesmo dia. Obrigatório ao mover para "Admitido".</td></tr>
+          <tr><td><strong>Data Saída</strong></td><td>Alta</td><td class="center"><span class="pill p-red">SIM</span></td><td>Evento real da saída</td><td>Resp. pela Admissão ou Clínica</td><td>Data real + Tipo de Saída. Obrigatório ao mover para "Alta da Unidade".</td></tr>
+          <tr><td><strong>Financeiro Responsável</strong></td><td>Avaliação</td><td class="center"><span class="pill p-red">SIM</span></td><td>Dados financeiros do pagador</td><td>Equipe comercial/financeira</td><td>Nome e contato do responsável pelo pagamento. Essencial para faturamento. Obrigatório antes da Admissão.</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ IMPACTO ══════════════════════════ -->
+  <section id="sec-impacto" class="sec">
+    <div class="sh"><div class="sh-title">Impacto das Lacunas no Negócio</div><div class="sh-sub">O "e daí?" — conectando os gaps de dados com consequências reais para receita, produtividade e decisão</div><div class="sh-line"></div></div>
+    <div class="al al-blue"><div class="al-b"><div class="al-t">Propósito desta seção</div><div class="al-tx">Dados ruins não são apenas um problema técnico — têm consequências diretas de negócio. Esta seção transforma os gaps identificados em argumentos de decisão executiva.</div></div></div>
+    <div style="margin-top:16px;">
+      <div class="impact-row hdr"><div class="impact-cell hdr">Lacuna de Dado</div><div class="impact-cell hdr">Receita</div><div class="impact-cell hdr">Produtividade</div><div class="impact-cell hdr">Previsibilidade</div><div class="impact-cell hdr">Experiência</div></div>
+      <div class="impact-row"><div class="impact-cell"><strong>Fonte zerada em SSA</strong></div><div class="impact-cell hi">Budget de marketing sem rastreabilidade de retorno</div><div class="impact-cell med">Pré-qual pode estar nos canais errados sem saber</div><div class="impact-cell hi">Impossível prever qual canal trará mais leads</div><div class="impact-cell low">—</div></div>
+      <div class="impact-row"><div class="impact-cell"><strong>Data 1º Contato ausente</strong></div><div class="impact-cell hi">Leads lentos perdem para concorrência — custo invisível</div><div class="impact-cell hi">SLA invisível — não há como cobrar agilidade</div><div class="impact-cell low">—</div><div class="impact-cell med">Família aguarda sem saber quando virá o contato</div></div>
+      <div class="impact-row"><div class="impact-cell"><strong>CRM morto pós-alta</strong></div><div class="impact-cell hi">Receita por internação sem parâmetro de duração média</div><div class="impact-cell hi">Gestão de leitos por intuição, não por dado</div><div class="impact-cell hi">Previsão de ocupação imprecisa — risco de subutilização</div><div class="impact-cell med">Pós-saída sem acompanhamento formal</div></div>
+      <div class="impact-row"><div class="impact-cell"><strong>Motivo de perda vazio em SSA</strong></div><div class="impact-cell hi">Perdas evitáveis não são identificadas nem recuperadas</div><div class="impact-cell med">Time não sabe quais objeções treinar para superar</div><div class="impact-cell med">Taxa de perda futura não projetável</div><div class="impact-cell low">—</div></div>
+      <div class="impact-row"><div class="impact-cell"><strong>Previsão de fechamento vazia</strong></div><div class="impact-cell hi">Pipeline sem valor e sem projeção de receita futura</div><div class="impact-cell med">Gestão do funil sem visibilidade de quando vai fechar</div><div class="impact-cell hi">Projeção de admissões mensais impossível</div><div class="impact-cell low">—</div></div>
+      <div class="impact-row"><div class="impact-cell"><strong>NPS inexistente</strong></div><div class="impact-cell med">Riscos de reputação não monitorados</div><div class="impact-cell low">—</div><div class="impact-cell low">—</div><div class="impact-cell hi">Satisfação da família completamente invisível</div></div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ PLANO DE AÇÃO ══════════════════════════ -->
+  <section id="sec-plano" class="sec">
+    <div class="sh"><div class="sh-title">Plano de Ação e Roadmap</div><div class="sh-sub">Priorização por impacto × esforço com KPIs de sucesso para cada ação</div><div class="sh-line"></div></div>
+    <div class="two-col">
+      <div class="cc"><div class="ct">Impacto × Esforço</div><div class="cd">Posicionamento das iniciativas</div><canvas id="chBubble" height="280"></canvas></div>
+      <div class="cc"><div class="ct">Distribuição por Prazo</div><div class="cd">Horizonte de implementação</div><canvas id="chPrazo" height="280"></canvas></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
+      <div style="background:rgba(0,137,123,.06);border:1px solid rgba(0,137,123,.25);border-radius:12px;padding:20px;">
+        <div style="font-family:'DM Serif Display',serif;font-size:15px;font-weight:700;color:var(--purple);margin-bottom:14px;">Agora — Próximas 4 semanas</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;align-items:flex-start;gap:8px;font-size:12px;"><span style="color:var(--purple);font-weight:700;flex-shrink:0">→</span><span style="color:var(--text)"><strong>Decisões 1 e 2:</strong> critério único de entrada + campos obrigatórios</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;font-size:12px;"><span style="color:var(--purple);font-weight:700;flex-shrink:0">→</span><span style="color:var(--text)"><strong>Configuração:</strong> Fonte + Data 1º Contato como bloqueio de etapa</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;font-size:12px;"><span style="color:var(--purple);font-weight:700;flex-shrink:0">→</span><span style="color:var(--text)"><strong>Protocolo:</strong> SSA adota modelo de desfecho de REC (card zumbi → fechar com motivo)</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;font-size:12px;"><span style="color:var(--purple);font-weight:700;flex-shrink:0">→</span><span style="color:var(--text)"><strong>Lista fechada:</strong> Motivo de Perda sem "Outros"</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;font-size:12px;"><span style="color:var(--purple);font-weight:700;flex-shrink:0">→</span><span style="color:var(--text)"><strong>Treinamento:</strong> registro em tempo real (não retroativo)</span></div>
+        </div>
+      </div>
+      <div style="background:var(--bg4);border:1px solid var(--border2);border-radius:10px;padding:20px;">
+        <div style="font-family:'DM Serif Display',serif;font-size:15px;font-weight:700;color:var(--purple2);margin-bottom:14px;">Depois — Horizonte 1–6 meses</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;align-items:flex-start;gap:8px;font-size:12px;"><span style="color:var(--purple2);font-weight:700;flex-shrink:0">→</span><span style="color:var(--text)"><strong>NPS ativo</strong> — workflow de coleta na entrada e saída</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;font-size:12px;"><span style="color:var(--purple2);font-weight:700;flex-shrink:0">→</span><span style="color:var(--text)"><strong>Dashboard de qualidade</strong> — Score de Card por responsável</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;font-size:12px;"><span style="color:var(--purple2);font-weight:700;flex-shrink:0">→</span><span style="color:var(--text)"><strong>Integração</strong> Pré-Qual → CRM (eliminar dupla digitação)</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;font-size:12px;"><span style="color:var(--purple2);font-weight:700;flex-shrink:0">→</span><span style="color:var(--text)"><strong>Automação</strong> — alertas de campos críticos e lead decay</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;font-size:12px;"><span style="color:var(--purple2);font-weight:700;flex-shrink:0">→</span><span style="color:var(--text)"><strong>Cesta mínima de indicadores</strong> funcionando de ponta a ponta</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tc">
+      <div class="tc-head"><h3>Plano Priorizado com KPIs de Sucesso</h3></div>
+      <div class="ts"><table>
+        <thead><tr><th>P</th><th>Ação</th><th>Impacto</th><th>Esforço</th><th>Prazo</th><th>KPI de Sucesso</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pill p-red">P1</span></td><td>Tornar "Fonte" obrigatório em SSA (bloqueio)</td><td>Muito Alto</td><td>Baixo</td><td>1 semana</td><td>Fonte ≥ 80% em novos leads SSA em 30 dias</td></tr>
+          <tr><td><span class="pill p-red">P1</span></td><td>Tornar "Data 1º Contato" obrigatório em ambas</td><td>Alto</td><td>Baixo</td><td>1 semana</td><td>Data 1º Contato ≥ 80% global em 30 dias</td></tr>
+          <tr><td><span class="pill p-red">P1</span></td><td>Padronizar critério de entrada do lead no CRM</td><td>Muito Alto</td><td>Médio</td><td>2 semanas</td><td>Critério documentado e validado por ambas unidades</td></tr>
+          <tr><td><span class="pill p-red">P1</span></td><td>Lista fechada para Motivo de Perda (sem "Outros")</td><td>Alto</td><td>Baixo</td><td>1 semana</td><td>Motivo Perda preenchido ≥ 90% em casos Perdidos</td></tr>
+          <tr><td><span class="pill p-yellow">P2</span></td><td>SSA adotar protocolo de desfecho de perda de REC</td><td>Alto</td><td>Baixo</td><td>2 semanas</td><td>Cards perdidos SSA com Motivo + Anotação ≥ 85%</td></tr>
+          <tr><td><span class="pill p-yellow">P2</span></td><td>Formulário unificado de entrada (eliminar dupla digitação)</td><td>Muito Alto</td><td>Alto</td><td>1 mês</td><td>Transferências manuais = zero</td></tr>
+          <tr><td><span class="pill p-yellow">P2</span></td><td>Treinamento em preenchimento em tempo real</td><td>Alto</td><td>Médio</td><td>2 semanas</td><td>Defasagem média de criação de card &lt; 24h</td></tr>
+          <tr><td><span class="pill p-blue">P3</span></td><td>Ativar workflow de NPS (entrada e saída)</td><td>Médio</td><td>Médio</td><td>1 mês</td><td>NPS coletado em ≥ 70% das altas</td></tr>
+          <tr><td><span class="pill p-blue">P3</span></td><td>Desativar campos com 0% sem perspectiva</td><td>Médio</td><td>Baixo</td><td>2 semanas</td><td>CRM com ≤ 20 campos inativos</td></tr>
+          <tr><td><span class="pill p-blue">P3</span></td><td>Dashboard de Score de Qualidade por Responsável</td><td>Médio</td><td>Alto</td><td>2 meses</td><td>Score médio por unidade &gt; 85/100</td></tr>
+          <tr><td><span class="pill p-gray">P4</span></td><td>Integração Pré-Qual → CRM via API</td><td>Transformacional</td><td>Muito Alto</td><td>3-6 meses</td><td>Índice de Fuga Pré-CRM &lt; 5%</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="sh" style="margin-top:16px;"><div class="sh-title" style="font-size:20px;">Roadmap em 5 Fases</div><div class="sh-line"></div></div>
+    <div class="roadmap" id="roadmapEl"></div>
+  </section>
+
+  <!-- ══════════════════════════ GLOSSÁRIO ══════════════════════════ -->
+  <section id="sec-glossario" class="sec">
+    <div class="sh"><div class="sh-title">Glossário Operacional</div><div class="sh-sub">Definições padrão para uso interno — devem ser validadas e formalmente adotadas pela gestão de ambas as unidades</div><div class="sh-line"></div></div>
+    <div class="al al-blue"><div class="al-b"><div class="al-t">Por que este glossário importa</div><div class="al-tx">O próprio dossiê identificou que SSA e REC usam critérios diferentes para conceitos básicos. Sem uma linguagem comum, as comparações são inválidas e as metas, incomparáveis. Este glossário propõe as definições que precisam ser acordadas antes de qualquer padronização.</div></div></div>
+    <div class="glos-grid" style="margin-top:16px;" id="glossGrid"></div>
+  </section>
+
+  <!-- ══ INTELIGÊNCIA OPERACIONAL ══ -->
+  <section id="sec-operacional" class="sec">
+    <div class="sh">
+      <div class="sh-title">Inteligência Operacional</div>
+      <div class="sh-sub">Esta seção complementa o dossiê principal com leituras adicionais da operação, a partir da base deduplicada mais recente (889 negociações únicas, até 31/mar/2026). O objetivo é aprofundar padrões de tempo, perdas, Estacionamento e comportamento por operadora — sem substituir o diagnóstico central de governança, padronização e qualidade de dados.</div>
+      <div class="sh-line"></div>
+    </div>
+
+    <div class="al al-blue">
+      <div class="al-t">Nota metodológica</div>
+      <div class="al-tx">As taxas de conversão calculadas nesta seção (SSA 64,5% | REC 50,5%) diferem do dossiê principal por usarem negociações únicas deduplicadas como denominador. O gap entre unidades persiste em ambos os critérios. Os tempos de ciclo baseados em data de criação do card estão subestimados — ver bloco "Registro Retroativo".</div>
+    </div>
+
+    <div class="tabs" style="margin-top:20px;">
+      <button class="tab-btn active" onclick="showTab('op-retro')">Registro Retroativo e Tempos</button>
+      <button class="tab-btn" onclick="showTab('op-perdas')">Perdas e Estacionamento</button>
+      <button class="tab-btn" onclick="showTab('op-ops')">Por Operadora</button>
+    </div>
+
+    <!-- ── BLOCO 1: Retroativo e Tempos ── -->
+    <div id="op-retro" class="tab-pane active">
+      <div class="al al-red" style="margin-top:4px;">
+        <div class="al-t">Achado confirmado — o CRM é alimentado após os fatos</div>
+        <div class="al-tx">65% dos deals de SSA (390/603) e 57% de REC (163/286) têm o card criado depois da data de admissão na origem, com defasagem mediana de 17 dias (SSA) e 21 dias (REC). Isso eleva esta observação de hipótese para achado operacional quantificável: o CRM está sendo usado como registro retroativo de eventos que já ocorreram, não como ferramenta de gestão em tempo real.</div>
+      </div>
+
+      <div class="kpi-grid" style="margin-top:18px;">
+        <div class="kc danger"><div class="kl">Cards Retroativos — SSA</div><div class="kv">65%</div><div class="ks">390/603 deals | mediana 17 dias de defasagem</div></div>
+        <div class="kc warn"><div class="kl">Cards Retroativos — REC</div><div class="kv">57%</div><div class="ks">163/286 deals | mediana 21 dias de defasagem</div></div>
+        <div class="kc"><div class="kl">Lead Time Real — SSA</div><div class="kv">23 dias</div><div class="ks">Mediana: admissão origem → admissão Florence</div></div>
+        <div class="kc"><div class="kl">Lead Time Real — REC</div><div class="kv">28 dias</div><div class="ks">Mediana: admissão origem → admissão Florence</div></div>
+        <div class="kc warn"><div class="kl">Ciclo Aparente — SSA</div><div class="kv">9 dias</div><div class="ks">Pela data de criação do card — subestimado</div></div>
+        <div class="kc warn"><div class="kl">Ciclo Aparente — REC</div><div class="kv">7 dias</div><div class="ks">Pela data de criação do card — subestimado</div></div>
+      </div>
+
+      <div class="two-col">
+        <div class="cc">
+          <div class="ct">Defasagem de registro por faixa</div>
+          <div class="cd">Cards criados após admissão na origem — SSA vs REC</div>
+          <canvas id="chRetro" height="220"></canvas>
+        </div>
+        <div class="cc">
+          <div class="ct">Distribuição de ciclos por faixa de tempo</div>
+          <div class="cd">% de deals fechados por janela — criação → fechamento</div>
+          <canvas id="chCicloFaixa" height="220"></canvas>
+        </div>
+      </div>
+
+      <div class="tc">
+        <div class="tc-head"><h3>Como reinterpretar as métricas de tempo</h3></div>
+        <div class="ts"><table>
+          <thead><tr><th>Métrica</th><th>Forma atual (enviesada)</th><th>Forma recomendada</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Lead time de internação</strong></td><td>Data criação card → admissão Florence</td><td>Data admissão na origem → admissão Florence</td></tr>
+            <tr><td><strong>SLA de resposta ao lead</strong></td><td>Data criação card → 1º contato</td><td>Data do contato real → 1º contato registrado</td></tr>
+            <tr><td><strong>Ciclo total</strong></td><td>Data criação → fechamento (SSA 9d | REC 7d)</td><td>Data admissão origem → admissão/perda Florence (SSA 23d | REC 28d)</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+
+      <div class="al al-yellow" style="margin-top:4px;">
+        <div class="al-t">SLA de 1º contato — apenas SSA tem dados suficientes</div>
+        <div class="al-tx">Dos 603 deals SSA, apenas 215 (36%) têm data de 1º contato registrada — mediana de 5 dias entre criação e primeiro contato, com apenas 8% ocorrendo em até 1 dia. Em REC, apenas 2 registros disponíveis, o que torna qualquer conclusão de SLA inviável. O campo precisa ser obrigatório para que esta métrica seja utilizável.</div>
+      </div>
+    </div>
+
+    <!-- ── BLOCO 2: Perdas e Estacionamento ── -->
+    <div id="op-perdas" class="tab-pane">
+      <p style="font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:20px;">A taxonomia abaixo distingue perdas não evitáveis (clínicas e estruturais) das que têm oportunidade de intervenção por processo — o que permite priorizar ações com maior retorno.</p>
+
+      <div class="two-col">
+        <div class="cc">
+          <div class="ct">Taxonomia de perdas — 337 casos totais</div>
+          <div class="cd">Por categoria de evitabilidade</div>
+          <canvas id="chTaxPerda" height="250"></canvas>
+        </div>
+        <div class="cc">
+          <div class="ct">Perfil de perdas por unidade</div>
+          <div class="cd">SSA vs REC — diferença de composição</div>
+          <canvas id="chPerdaComp" height="250"></canvas>
+        </div>
+      </div>
+
+      <div class="tc">
+        <div class="tc-head"><h3>Categorias — o que é evitável e como agir</h3></div>
+        <div class="ts"><table>
+          <thead><tr><th>Categoria</th><th>Total</th><th>SSA</th><th>REC</th><th>Natureza</th><th>Ação</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Clínica — óbito / piora / MA Contraindicou</strong></td><td class="mono center">95 (28%)</td><td class="mono ssa center">61</td><td class="mono rec center">34</td><td><span class="pill p-gray">Não evitável</span></td><td>Inerente ao perfil clínico — sem ação operacional direta</td></tr>
+            <tr><td><strong>Financeira / Negativa de Operadora</strong></td><td class="mono center">67 (20%)</td><td class="mono ssa center">65</td><td class="mono rec center">15</td><td><span class="pill p-gray">Estrutural externa</span></td><td>Parte evitável: triagem financeira pré-CRM em casos particulares</td></tr>
+            <tr><td><strong>Alta hospitalar antes da admissão</strong></td><td class="mono center">62 (18%)</td><td class="mono ssa center">21</td><td class="mono rec center">22</td><td><span class="pill p-yellow">Parcialmente evitável</span></td><td>Acelerar autorização em casos com previsão de alta próxima</td></tr>
+            <tr><td><strong>Alinhamento familiar</strong></td><td class="mono center">52 (15%)</td><td class="mono ssa center">26</td><td class="mono rec center">39</td><td><span class="pill p-yellow">Evitável por processo</span></td><td>Verificação estruturada de expectativas antes do parecer técnico</td></tr>
+            <tr><td><strong>Processo / Informação</strong></td><td class="mono center">20 (6%)</td><td class="mono ssa center">4</td><td class="mono rec center">11</td><td><span class="pill p-red">Evitável</span></td><td>Protocolo de informação com hospital de origem; reduzir "falta de informações" em REC</td></tr>
+            <tr><td><strong>Outros / não categorizado</strong></td><td class="mono center">~40 (12%)</td><td class="mono ssa center">~23</td><td class="mono rec center">~16</td><td><span class="pill p-gray">Dado incompleto</span></td><td>Eliminar "Outros" da lista de motivos de perda</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+
+      <div class="al al-yellow">
+        <div class="al-t">Alinhamento familiar — grupo mais atacável, especialmente em REC</div>
+        <div class="al-tx">REC perde 28% dos casos por alinhamento familiar vs. 13% em SSA. Esses casos frequentemente chegam a etapas avançadas — com parecer técnico emitido e autorização em andamento — antes de a decisão familiar revelar-se desfavorável. A hipótese operacional é que a ausência de verificação estruturada de expectativas no início da avaliação explica parte dessas perdas tardias.</div>
+      </div>
+
+      <div class="sh" style="margin-top:24px;margin-bottom:16px;"><div class="sh-title" style="font-size:18px;">Estacionamento como ponto de perda em REC</div><div class="sh-line"></div></div>
+
+      <div class="kpi-grid">
+        <div class="kc ok"><div class="kl">Perdas no Estacionamento — SSA</div><div class="kv">14%</div><div class="ks">27 de 200 perdas totais</div></div>
+        <div class="kc danger"><div class="kl">Perdas no Estacionamento — REC</div><div class="kv">26%</div><div class="ks">35 de 137 perdas totais — quase o dobro de SSA</div></div>
+        <div class="kc"><div class="kl">Perdas na Elegibilidade — SSA</div><div class="kv">55%</div><div class="ks">Descarte precoce — sinal operacionalmente saudável</div></div>
+        <div class="kc"><div class="kl">Perdas na Elegibilidade — REC</div><div class="kv">47%</div><div class="ks">Menor proporção de descarte precoce que SSA</div></div>
+      </div>
+
+      <div class="cc">
+        <div class="ct">Distribuição das perdas por etapa do funil</div>
+        <div class="cd">Percentual do total de perdas por unidade — SSA vs REC</div>
+        <canvas id="chLossStage" height="190"></canvas>
+      </div>
+
+      <div class="al al-yellow" style="margin-top:4px;">
+        <div class="al-t">Hipótese — Estacionamento como antesala de perda em REC</div>
+        <div class="al-tx">Com 26% das perdas concentradas nessa etapa (vs. 14% em SSA), o padrão indica que o Estacionamento pode estar sendo usado como buffer para casos de difícil decisão, em vez de pausa estruturada com perspectiva real de retomada. Esta é uma hipótese que merece validação com a equipe. Ação sugerida: prazo máximo de 30 dias, revisão ativa obrigatória e critério formal de saída (retomada ou encerramento com motivo).</div>
+      </div>
+    </div>
+
+    <!-- ── BLOCO 3: Por Operadora ── -->
+    <div id="op-ops" class="tab-pane">
+      <div class="al al-blue">
+        <div class="al-t">Leitura descritiva — não é ranking de desempenho</div>
+        <div class="al-tx">Esta análise descreve padrões observados por operadora na base atual. Os resultados refletem a combinação de perfil clínico dos casos, cobertura do produto e características do processo de autorização de cada operadora — não apenas a eficiência operacional da Florence. O corte mínimo adotado é de 10 deals para leitura descritiva. Uma operadora abaixo desse corte (Unimed Recife, n=7) é mantida na tabela como leitura exploratória, explicitamente sinalizada, e não aparece nos gráficos.</div>
+      </div>
+
+      <div class="two-col" style="margin-top:18px;">
+        <div class="cc">
+          <div class="ct">Taxa de conversão por operadora</div>
+          <div class="cd">Volume mínimo de 10 deals — % de casos admitidos entre os fechados</div>
+          <canvas id="chOpConv" height="290"></canvas>
+        </div>
+        <div class="cc">
+          <div class="ct">Ciclo mediano por operadora</div>
+          <div class="cd">Dias da criação ao fechamento — sujeito a viés de registro retroativo</div>
+          <canvas id="chOpCiclo" height="290"></canvas>
+        </div>
+      </div>
+
+      <div class="tc">
+        <div class="tc-head"><h3>Padrões observados por operadora na amostra</h3></div>
+        <div class="ts"><table>
+          <thead><tr><th>Operadora</th><th>n</th><th>Conv%</th><th>Ciclo Med.</th><th>Padrão observado</th><th>Ressalva</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Bradesco Saúde</strong></td><td class="mono center">163</td><td class="mono center" style="color:#047857">71%</td><td class="mono center">7d</td><td>Maior volume da base. Ciclo estável, conversão consistente. Presente em ambas as unidades.</td><td>Volume mais alto — leitura mais robusta</td></tr>
+            <tr><td><strong>Petrobras</strong></td><td class="mono center">121</td><td class="mono center" style="color:#047857">84%</td><td class="mono center">7d</td><td>Ciclo previsível, conversão alta. Concentrado em SSA (119/121).</td><td>Concentração em uma unidade pode influenciar o padrão</td></tr>
+            <tr><td><strong>CHESF</strong></td><td class="mono center">37</td><td class="mono center" style="color:#047857">68%</td><td class="mono center">2d</td><td>Ciclo aparentemente muito curto. 62% dos deals são retroativos (23/37).</td><td><span class="pill p-yellow">Cautela:</span> ciclo de 2d provavelmente reflete registro pós-fato</td></tr>
+            <tr><td><strong>GEAP</strong></td><td class="mono center">58</td><td class="mono center">60%</td><td class="mono center">8d</td><td>Ciclo médio, conversão razoável. Volume adequado para leitura descritiva.</td><td>—</td></tr>
+            <tr><td><strong>Convênio Credenciado</strong></td><td class="mono center">97</td><td class="mono center" style="color:#92400e">53%</td><td class="mono center">9d</td><td>Categoria ampla — pode agregar operadoras distintas. Conversão abaixo da média geral.</td><td><span class="pill p-yellow">Cautela:</span> pode ser categoria genérica, não operadora específica</td></tr>
+            <tr><td><strong>AMIL</strong></td><td class="mono center">62</td><td class="mono center" style="color:#92400e">54%</td><td class="mono center">8d</td><td>Volume relevante. Ciclo médio, conversão abaixo de grandes convênios.</td><td>Volume adequado para leitura descritiva</td></tr>
+            <tr><td><strong>PLANSERV</strong></td><td class="mono center">14</td><td class="mono center">46%</td><td class="mono center">7d</td><td>Volume limítrofe (n=14). Conversão abaixo da média, ciclo regular.</td><td><span class="pill p-yellow">Volume limítrofe</span> — leitura com cautela</td></tr>
+            <tr><td><strong>Particular</strong></td><td class="mono center">49</td><td class="mono center" style="color:#b91c1c">22%</td><td class="mono center">7d</td><td>Menor conversão da base. 50% das perdas por inviabilidade financeira. A base sugere oportunidade de revisar a triagem financeira pré-CRM em casos particulares.</td><td>Hipótese plausível — sem dados pré-CRM para confirmar</td></tr>
+            <tr><td><strong>Sul América</strong></td><td class="mono center">12</td><td class="mono center">67%</td><td class="mono center">22d</td><td>Ciclo variável. Apenas 3 ciclos com datas disponíveis — mediana pouco representativa.</td><td><span class="pill p-yellow">n limítrofe</span> — leitura com cautela</td></tr>
+            <tr style="background:var(--bg3);border-top:2px solid var(--border);">
+              <td colspan="6" style="padding:5px 12px;font-size:10px;font-weight:700;color:var(--warn);text-transform:uppercase;letter-spacing:.8px;">Abaixo do corte metodológico (n &lt; 10) — leitura exploratória</td>
+            </tr>
+            <tr><td><strong>Unimed Recife</strong></td><td class="mono center">7</td><td class="mono center" style="color:#b91c1c">14%</td><td class="mono center">40d</td><td>Todos os casos em REC. Ciclo longo, causas mistas.</td><td><span class="pill p-yellow">Exploratório</span> — n&lt;10</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+// ── Navigation ────────────────────────────────────────────────────────
+function show(id) {
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  const sec = document.getElementById('sec-'+id);
+  if(sec) sec.classList.add('active');
+  const ni = document.querySelector('.ni[onclick*="\'' + id + '\'"]');
+  if(ni) ni.classList.add('active');
+  window.scrollTo(0,0);
+  setTimeout(initCharts,80);
+  if(id==='operacional') setTimeout(buildOperacionalCharts,150);
+}
+function showTab(id) {
+  const pane = document.getElementById(id);
+  const sec = pane ? pane.closest('.sec') || document : document;
+  sec.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  sec.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  if(pane) pane.classList.add('active');
+  const btn = sec.querySelector('.tab-btn[onclick*="\'' + id + '\'"]');
+  if(btn) btn.classList.add('active');
+}
+
+// ── Chart defaults ────────────────────────────────────────────────────
+const C={navy:'#f5f3fb',card:'#ffffff',cyan:'#5a4a82',cyan2:'#764ba2',accent:'#dc2626',warn:'#f59e0b',ok:'#10b981',muted:'#9994ad',white:'#2d2a3d'};
+Chart.defaults.color=C.muted;
+Chart.defaults.borderColor='#e9e5f3';
+Chart.defaults.backgroundColor='rgba(90,74,130,.06)';
+Chart.defaults.font.family='Inter';
+let chartsInit=false;
+
+function initCharts(){
+  if(chartsInit)return;
+  chartsInit=true;
+
+  new Chart(document.getElementById('chStatus'),{type:'bar',data:{labels:['SSA','REC'],datasets:[{label:'Admitida',data:[704,230],backgroundColor:C.ok},{label:'Em Andamento',data:[88,39],backgroundColor:C.cyan},{label:'Perdida',data:[156,208],backgroundColor:C.accent}]},options:{responsive:true,scales:{x:{stacked:true,ticks:{color:C.muted},grid:{color:'#f3f0fa'}},y:{stacked:true,ticks:{color:C.muted},grid:{color:'#f3f0fa'}}},plugins:{legend:{labels:{color:C.muted}}}}});
+
+  new Chart(document.getElementById('chVolume'),{type:'line',data:{labels:['Dez/25','Jan/26','Fev/26','Mar/26'],datasets:[{label:'SSA',data:[239,372,223,114],borderColor:C.cyan,backgroundColor:'rgba(90,74,130,.08)',fill:true,tension:.4,pointRadius:5},{label:'REC',data:[136,147,132,62],borderColor:C.warn,backgroundColor:'rgba(245,158,11,.08)',fill:true,tension:.4,pointRadius:5}]},options:{responsive:true,scales:{x:{ticks:{color:C.muted},grid:{color:'#f3f0fa'}},y:{ticks:{color:C.muted},grid:{color:'#f3f0fa'}}},plugins:{legend:{labels:{color:C.muted}}}}});
+
+  new Chart(document.getElementById('chEtapa'),{type:'doughnut',data:{labels:['Admitido','Alta Unidade','Elegibilidade','Estacionamento','Autorização','Avaliação','Admissão','Pré-Implantação'],datasets:[{data:[546,388,223,79,70,56,30,33],backgroundColor:[C.ok,'#00bfa5',C.cyan,C.cyan2,'#4dd0e1',C.warn,C.accent,'#ce93d8'],borderWidth:2,borderColor:C.card}]},options:{responsive:true,cutout:'55%',plugins:{legend:{labels:{color:C.muted,font:{size:11}}}}}});
+
+  new Chart(document.getElementById('chPerda'),{type:'bar',data:{labels:['Óbito','Alta Hosp.','Fam. Domicílio','Neg. Operadora','Desalinhamento','Piora Clínica','Falta Info'],datasets:[{label:'SSA',data:[46,20,35,27,8,0,0],backgroundColor:C.cyan},{label:'REC',data:[36,34,22,6,28,11,13],backgroundColor:C.warn}]},options:{responsive:true,indexAxis:'y',scales:{x:{ticks:{color:C.muted},grid:{color:'#f3f0fa'}},y:{ticks:{color:C.muted,font:{size:11}},grid:{display:false}}},plugins:{legend:{labels:{color:C.muted}}}}});
+
+  buildFunnels();
+  new Chart(document.getElementById('chCanais'),{type:'bar',data:{labels:['WhatsApp','Recepção','Fale Conosco','Outros','Ligação'],datasets:[{data:[1211,68,59,20,5],backgroundColor:[C.cyan,C.cyan2,'#4dd0e1',C.warn,C.ok],borderRadius:5}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{ticks:{color:C.muted},grid:{display:false}},y:{ticks:{color:C.muted},grid:{color:'#f3f0fa'}}}}});
+
+  new Chart(document.getElementById('chConvComp'),{type:'bar',data:{labels:['Admitida','Em Andamento','Perdida'],datasets:[{label:'SSA',data:[81.9,9.3,18.1],backgroundColor:C.cyan,borderRadius:4},{label:'REC',data:[52.5,8.9,47.5],backgroundColor:C.warn,borderRadius:4}]},options:{responsive:true,scales:{x:{ticks:{color:C.muted},grid:{display:false}},y:{max:100,ticks:{color:C.muted,callback:v=>v+'%'},grid:{color:'#f3f0fa'}}},plugins:{legend:{labels:{color:C.muted}}}}});
+
+  new Chart(document.getElementById('chMotivoComp'),{type:'radar',data:{labels:['Óbito','Alta Hosp.','Fam. Domicílio','Desalinhamento','Neg. Operadora','Piora Clínica'],datasets:[{label:'SSA',data:[29.5,12.8,22.4,5.1,17.3,0],borderColor:C.cyan,backgroundColor:'rgba(90,74,130,.08)',pointRadius:4},{label:'REC',data:[17.3,16.3,10.6,13.5,2.9,5.3],borderColor:C.warn,backgroundColor:'rgba(245,158,11,.08)',pointRadius:4}]},options:{responsive:true,scales:{r:{ticks:{color:C.muted,backdropColor:'#ffffff',font:{size:10}},grid:{color:'#e9e5f3'},pointLabels:{color:C.muted,font:{size:11}}}},plugins:{legend:{labels:{color:C.muted}}}}});
+
+  buildCbarChart();
+
+  new Chart(document.getElementById('chAder'),{type:'radar',data:{labels:['Identificação\nDemanda','Qualificação','Avaliação\nClínica','Logística\nRemoção','Admissão/Docs','Autorização','Saída/Pós-Alta'],datasets:[{label:'SSA',data:[80,95,62,78,80,85,30],borderColor:C.cyan,backgroundColor:'rgba(90,74,130,.08)',pointRadius:5},{label:'REC',data:[89,70,55,50,62,70,28],borderColor:C.warn,backgroundColor:'rgba(245,158,11,.08)',pointRadius:5}]},options:{responsive:true,scales:{r:{min:0,max:100,ticks:{color:C.muted,backdropColor:'#ffffff',stepSize:25,font:{size:10}},grid:{color:'#e9e5f3'},pointLabels:{color:C.muted,font:{size:11}}}},plugins:{legend:{labels:{color:C.muted}}}}});
+
+  new Chart(document.getElementById('chFill'),{type:'doughnut',data:{labels:['0% Fill (Mortos)','< 10%','10–50%','50–80%','≥ 80% (Ótimo)'],datasets:[{data:[29,11,22,30,20],backgroundColor:[C.accent,'#ef9a9a',C.warn,C.cyan2,C.ok],borderWidth:2,borderColor:C.card}]},options:{responsive:true,cutout:'55%',plugins:{legend:{labels:{color:C.muted,font:{size:11}}}}}});
+
+  new Chart(document.getElementById('chKPIst'),{type:'bar',data:{labels:['Disponível','Parcial','Indisponível'],datasets:[{data:[3,5,5],backgroundColor:[C.ok,C.warn,C.accent],borderRadius:6}]},options:{responsive:true,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{color:C.muted},grid:{color:'#f3f0fa'}},y:{ticks:{color:C.muted},grid:{display:false}}}}});
+
+  new Chart(document.getElementById('chDir'),{type:'doughnut',data:{labels:['Não se Aplica','Aval. SSA','Aval. REC','Sem Desfecho Registrado','Outros Serviços'],datasets:[{data:[824,187,123,141,125],backgroundColor:[C.muted,C.cyan,C.ok,C.accent,C.warn],borderWidth:2,borderColor:C.card}]},options:{responsive:true,cutout:'55%',plugins:{legend:{labels:{color:C.muted,font:{size:11}}}}}});
+
+  new Chart(document.getElementById('chConv'),{type:'bar',data:{labels:['Particular','PLANSERV','Sul América','Bradesco','Unimed','AMIL','GEAP','Cassi'],datasets:[{data:[107,44,42,39,28,24,21,12],backgroundColor:[C.muted,C.muted,C.cyan,C.cyan2,'#4dd0e1',C.cyan2,C.ok,C.warn],borderRadius:4}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{ticks:{color:C.muted,font:{size:11}},grid:{display:false}},y:{ticks:{color:C.muted},grid:{color:'#f3f0fa'}}}}});
+
+  new Chart(document.getElementById('chBubble'),{type:'bubble',data:{datasets:[{label:'Fonte obrigatório (SSA)',data:[{x:1,y:4.5,r:13}],backgroundColor:'rgba(0,137,123,.7)'},{label:'Data 1º Contato obrig.',data:[{x:1.5,y:4,r:12}],backgroundColor:'rgba(0,137,123,.7)'},{label:'Critério entrada CRM',data:[{x:2.5,y:5,r:16}],backgroundColor:'rgba(90,74,130,.7)'},{label:'Lista Motivo Perda',data:[{x:1,y:3.5,r:10}],backgroundColor:'rgba(245,124,0,.7)'},{label:'Protocolo SSA (desfecho)',data:[{x:1.5,y:3.5,r:10}],backgroundColor:'rgba(245,124,0,.7)'},{label:'Formulário unificado',data:[{x:3.5,y:5,r:18}],backgroundColor:'rgba(0,119,182,.7)'},{label:'Integração API',data:[{x:5,y:5,r:22}],backgroundColor:'rgba(229,57,53,.6)'}]},options:{responsive:true,scales:{x:{min:0,max:6,title:{display:true,text:'Esforço →',color:C.muted},ticks:{color:C.muted},grid:{color:'#f3f0fa'}},y:{min:0,max:6,title:{display:true,text:'← Impacto',color:C.muted},ticks:{color:C.muted},grid:{color:'#f3f0fa'}}},plugins:{legend:{labels:{color:C.muted,font:{size:10}}}}}});
+
+  new Chart(document.getElementById('chPrazo'),{type:'pie',data:{labels:['1 semana','2 semanas','1 mês','2 meses','3+ meses'],datasets:[{data:[4,3,2,1,1],backgroundColor:[C.ok,C.cyan,C.warn,'#ce93d8',C.accent],borderWidth:2,borderColor:C.card}]},options:{responsive:true,plugins:{legend:{labels:{color:C.muted,font:{size:11}}}}}});
+
+  buildRoadmap();
+  buildGlossary();
+}
+
+function buildFunnels(){
+  const fSSA=[{n:'Admitido',v:464,p:48.9,c:'#00897b'},{n:'Alta Unidade',v:240,p:25.3,c:'#34d399'},{n:'Elegibilidade',v:104,p:11.0,c:'#5a4a82'},{n:'Avaliação',v:41,p:4.3,c:'#e53935'},{n:'Estacionamento',v:30,p:3.2,c:'#006d8f'},{n:'Admissão',v:30,p:3.2,c:'#4dd0e1'},{n:'Autorização',v:27,p:2.8,c:'#f57c00'},{n:'Pré-Implantação',v:12,p:1.3,c:'#ce93d8'}];
+  const fREC=[{n:'Alta Unidade',v:148,p:31.0,c:'#34d399'},{n:'Elegibilidade',v:119,p:24.9,c:'#5a4a82'},{n:'Admitido',v:82,p:17.2,c:'#00897b'},{n:'Estacionamento',v:49,p:10.3,c:'#006d8f'},{n:'Autorização',v:43,p:9.0,c:'#f57c00'},{n:'Pré-Implantação',v:21,p:4.4,c:'#ce93d8'},{n:'Avaliação',v:15,p:3.1,c:'#e53935'}];
+  [['funnelSSA',fSSA],['funnelREC',fREC]].forEach(([id,data])=>{
+    const el=document.getElementById(id);
+    data.forEach((s,i)=>{
+      const d=document.createElement('div');
+      d.className='fs';
+      d.style.cssText=`background:${s.c};width:${Math.max(40,100-i*8)}%;opacity:${0.96-i*0.04}`;
+      d.innerHTML=`<span>${s.n}</span><span style="opacity:.85;font-size:11px">${s.v} · ${s.p.toFixed(1)}%</span>`;
+      el.appendChild(d);
+    });
+  });
+}
+
+function buildCbarChart(){
+  const fields=[
+    {n:'Fonte (Origem)',ssa:0,rec:90},{n:'Particularidades Neg.',ssa:79,rec:11},
+    {n:'Data 1º Contato',ssa:45,rec:1},{n:'Empresa Remoção',ssa:62,rec:17},
+    {n:'Classif. Contratação',ssa:99,rec:63},{n:'Data Admissão',ssa:77,rec:49},
+    {n:'Motivo de Perda',ssa:16,rec:44},{n:'Emissão Parecer',ssa:84,rec:65},
+    {n:'Autorização Aval.',ssa:89,rec:72},{n:'Tipo Contratação',ssa:100,rec:100},
+  ];
+  const el=document.getElementById('cbarChart');
+  const leg=document.createElement('div');
+  leg.style.cssText='display:flex;gap:18px;margin-bottom:14px;';
+  leg.innerHTML='<span style="color:var(--purple);font-size:11px;font-weight:700;">■ SSA · Salvador</span><span style="color:#b45309;font-size:11px;font-weight:700;margin-left:16px;">■ REC · Recife</span>';
+  el.appendChild(leg);
+  fields.forEach(f=>{
+    const r=document.createElement('div');r.className='cbar-row';
+    r.innerHTML=`<div class="cbar-lbl">${f.n}</div><div class="cbar-bars"><div class="cbar-wrap"><span class="cbar-unit" style="color:var(--purple)">SSA</span><div class="cbar-track"><div class="cbar-fill cbar-ssa" style="width:${f.ssa}%"></div></div><span class="cbar-pct" style="color:var(--purple)">${f.ssa}%</span></div><div class="cbar-wrap"><span class="cbar-unit" style="color:#b45309">REC</span><div class="cbar-track"><div class="cbar-fill cbar-rec" style="width:${f.rec}%"></div></div><span class="cbar-pct" style="color:#b45309">${f.rec}%</span></div></div>`;
+    el.appendChild(r);
+  });
+}
+
+function buildRoadmap(){
+  const phases=[
+    {phase:'Fase 0 — Semanas 1-2',title:'Quick Wins de Configuração (Custo Zero)',text:'Campos obrigatórios no CRM (Fonte, Data 1º Contato), listas fechadas para Motivo de Perda, critério único de entrada documentado. SSA adota protocolo de desfecho de REC.',tag:'Custo: Baixo · Impacto: Alto · 2 semanas',filled:true},
+    {phase:'Fase 1 — Semanas 2-4',title:'Mudança de Comportamento Operacional',text:'Treinamento para preenchimento em tempo real (não retroativo). SLA de preenchimento definido. Revisão e desativação de campos obsoletos. Sessão de alinhamento SSA × REC.',tag:'Custo: Médio · Impacto: Alto · +2 semanas',filled:true},
+    {phase:'Fase 2 — Mês 2',title:' Construção da Base de Indicadores',text:'Dashboard de KPIs operacionais, Score de Qualidade por responsável, relatório mensal automatizado, alertas de campos críticos não preenchidos.',tag:'Custo: Médio · Impacto: Alto · 1 mês',filled:false},
+    {phase:'Fase 3 — Meses 2-3',title:' Eliminação da Dupla Digitação',text:'Formulário unificado de entrada ou integração Planilha Pré-Qual → CRM. Dados de captação chegando automaticamente ao CRM. Ativação do NPS.',tag:'Custo: Alto · Impacto: Muito Alto · 4-6 semanas',filled:false},
+    {phase:'Fase 4 — Meses 3-6',title:' Automação e CRM como Sistema Central',text:'Integração via API, workflows automáticos de follow-up, alertas de qualidade em tempo real, NPS automatizado, relatórios integrados com demais funis.',tag:'Custo: Muito Alto · Impacto: Transformacional · 3-6 meses',filled:false},
+  ];
+  const el=document.getElementById('roadmapEl');
+  phases.forEach((p,i)=>{
+    const div=document.createElement('div');div.className='rm-item';
+    div.innerHTML=`<div class="rm-line"><div class="rm-dot ${p.filled?'filled':''}"></div>${i<phases.length-1?'<div class="rm-vline"></div>':''}</div><div class="rm-content"><div class="rm-phase">${p.phase}</div><div class="rm-title">${p.title}</div><div class="rm-text">${p.text}</div><div class="rm-tag">${p.tag}</div></div>`;
+    el.appendChild(div);
+  });
+}
+
+function buildGlossary(){
+  const terms=[
+    {term:'Lead',def:'Qualquer pessoa (familiar, médico, paciente) que fez contato sobre possibilidade de internação na Florence, independente de qualquer triagem.',note:'Nasce no momento do primeiro contato — seja pelo WhatsApp, telefone ou qualquer canal.'},
+    {term:'Lead Qualificado (Pré-Qual)',def:'Lead que passou pela triagem inicial e foi identificado como potencial candidato para um dos funis de internação. Criado na Planilha de Controle.',note:'Não é ainda um lead no CRM — ainda pode ser descartado antes de entrar no sistema.'},
+    {term:'Elegível',def:'Lead que atende aos critérios clínicos e operacionais mínimos para abertura de card no RD CRM. É o critério que precisa ser padronizado entre SSA e REC (Decisão 1).',note:'Não significa que será admitido. É o início do processo formal.'},
+    {term:'Em Avaliação',def:'Lead cujo card está na etapa "Avaliação" do funil, com processo de avaliação clínica em curso.',note:'Não inclui leads que estão apenas "aguardando" sem ação ativa da equipe.'},
+    {term:'Estacionado',def:'Lead que não pode avançar por motivo externo (convênio, clínica, família, judicial) mas com perspectiva de retomada.',note:'Não é sinônimo de perdido. Exige Motivo de Estacionamento preenchido.'},
+    {term:'Admitido',def:'Lead que efetivou a internação na Florence — contrato assinado, paciente fisicamente presente. Data de Admissão Florence preenchida.',note:'Não é o mesmo que "autorizado" ou "em processo de remoção".'},
+    {term:'Perdido',def:'Lead para o qual o processo de internação foi encerrado definitivamente, sem perspectiva de retomada. Card em status "Perdida" com Motivo de Perda obrigatório.',note:'Não pode ficar "em andamento" indefinidamente (card zumbi).'},
+    {term:'Não Encaminhado',def:'Lead que passou pela Pré-Qualificação mas não foi direcionado para nenhum funil de internação.',note:'Diferente de "Perdido": o não encaminhado nunca entrou no CRM; o perdido entrou e foi encerrado.'},
+    {term:'Taxa de Conversão',def:'Leads Vendidos / (Leads Vendidos + Leads Perdidos) × 100. Exclui leads Em Andamento.',note:'Não comparável entre SSA e REC sem padronizar critério de entrada (Decisão 1).'},
+    {term:'Negociação Única',def:'Uma negociação identificada pelo ID único do card no CRM, independente de quantas linhas gera na exportação (por causa dos vínculos de contato).',note:'Unidade de análise principal. Não confundir com linhas na exportação.'},
+    {term:'Card Zumbi',def:'Card em status "Em Andamento" sem atualização há mais de 30 dias, sem Motivo de Estacionamento ativo e sem Previsão de Fechamento.',note:'Não é estado permanente aceitável. Deve ser fechado como Perdido ou reativado com plano de ação.'},
+    {term:'Lead Time de Captação',def:'Intervalo entre a admissão do paciente na instituição de origem e a admissão efetiva na Florence.',note:'Não confundir com Ciclo no CRM (que começa na criação do card, não na origem clínica).'},
+  ];
+  const el=document.getElementById('glossGrid');
+  terms.forEach(t=>{
+    const d=document.createElement('div');d.className='glos-card';
+    d.innerHTML=`<div class="gc-term">${t.term}</div><div class="gc-def">${t.def}</div><div class="gc-note">${t.note}</div>`;
+    el.appendChild(d);
+  });
+}
+
+  if(document.getElementById('chPreQualMes')){
+    new Chart(document.getElementById('chPreQualMes'),{type:'bar',data:{
+      labels:['Dez/25','Jan/26','Fev/26','Mar/26','Abr/26'],
+      datasets:[{
+        label:'Leads Pré-Qual',
+        data:[53,778,202,279,88],
+        backgroundColor:['rgba(90,74,130,.4)','rgba(90,74,130,.85)','rgba(90,74,130,.4)','rgba(90,74,130,.4)','rgba(90,74,130,.4)'],
+        borderColor:['rgba(90,74,130,.6)','rgba(90,74,130,1)','rgba(90,74,130,.6)','rgba(90,74,130,.6)','rgba(90,74,130,.6)'],
+        borderWidth:2,borderRadius:5
+      }]
+    },options:{responsive:true,plugins:{legend:{display:false}},scales:{
+      x:{ticks:{color:C.muted},grid:{display:false}},
+      y:{ticks:{color:C.muted},grid:{color:'#f3f0fa'},title:{display:true,text:'Leads',color:C.muted,font:{size:11}}}
+    }}});
+  }
+
+function buildOperacionalCharts(){
+  // Use a registry to avoid recreating charts on every visit
+  const charts = window._opCharts = window._opCharts || {};
+  function make(id, config){
+    if(charts[id]) { charts[id].destroy(); }
+    const el = document.getElementById(id);
+    if(!el) return;
+    charts[id] = new Chart(el, config);
+  }
+  const gridColor = '#f3f0fa';
+  const mkScales = (extra={}) => Object.assign({x:{ticks:{color:C.muted},grid:{display:false}},y:{ticks:{color:C.muted},grid:{color:gridColor}}}, extra);
+
+  make('chRetro',{type:'bar',data:{
+    labels:['Até 7 dias','8 a 30 dias','31 a 90 dias','Mais de 90 dias'],
+    datasets:[
+      {label:'SSA',data:[89,203,90,8],backgroundColor:'rgba(90,74,130,.75)',borderRadius:4},
+      {label:'REC',data:[35,70,44,14],backgroundColor:'rgba(245,158,11,.7)',borderRadius:4}
+    ]
+  },options:{responsive:true,scales:mkScales(),plugins:{legend:{labels:{color:C.muted}}}}});
+
+  make('chCicloFaixa',{type:'bar',data:{
+    labels:['Até 7d','Até 14d','Até 30d','Até 60d'],
+    datasets:[
+      {label:'SSA',data:[42,71,93,99],backgroundColor:'rgba(90,74,130,.75)',borderRadius:4},
+      {label:'REC',data:[55,77,91,99],backgroundColor:'rgba(245,158,11,.7)',borderRadius:4}
+    ]
+  },options:{responsive:true,scales:mkScales({y:{max:100,ticks:{color:C.muted,callback:v=>v+'%'},grid:{color:gridColor}}}),plugins:{legend:{labels:{color:C.muted}}}}});
+
+  make('chTaxPerda',{type:'doughnut',data:{
+    labels:['Clínica','Financeira','Alta hosp.','Alinhamento fam.','Processo/Info','Outros'],
+    datasets:[{data:[95,67,62,52,20,41],
+      backgroundColor:['#9ca3af','#f59e0b','#fcd34d','#5a4a82','#10b981','#e5e7eb'],
+      borderWidth:2,borderColor:'#ffffff'}]
+  },options:{responsive:true,cutout:'52%',plugins:{legend:{labels:{color:C.muted,font:{size:11}}}}}});
+
+  make('chPerdaComp',{type:'bar',data:{
+    labels:['Clínica','Financeira','Alta hosp.','Alinhamento','Processo'],
+    datasets:[
+      {label:'SSA (%)',data:[30,32,10,13,2],backgroundColor:'rgba(90,74,130,.75)',borderRadius:4},
+      {label:'REC (%)',data:[25,11,16,28,8],backgroundColor:'rgba(245,158,11,.7)',borderRadius:4}
+    ]
+  },options:{responsive:true,scales:mkScales({x:{ticks:{color:C.muted,font:{size:11}},grid:{display:false}},y:{max:35,ticks:{color:C.muted,callback:v=>v+'%'},grid:{color:gridColor}}}),plugins:{legend:{labels:{color:C.muted}}}}});
+
+  make('chLossStage',{type:'bar',data:{
+    labels:['Elegibilidade','Estacionamento','Avaliação','Autorização','Pré-Impl.'],
+    datasets:[
+      {label:'SSA',data:[55,14,18,11,2],backgroundColor:'rgba(90,74,130,.75)',borderRadius:4},
+      {label:'REC',data:[47,26,7,17,4],backgroundColor:'rgba(245,158,11,.7)',borderRadius:4}
+    ]
+  },options:{responsive:true,indexAxis:'y',scales:{x:{max:60,ticks:{color:C.muted,callback:v=>v+'%'},grid:{color:gridColor}},y:{ticks:{color:C.muted},grid:{display:false}}},plugins:{legend:{labels:{color:C.muted}}}}});
+
+  const opLabels=['Bradesco','Petrobras','CHESF','GEAP','Conv. Cred.','AMIL','PLANSERV','Particular','Sul América'];
+  const opConv=[71,84,68,60,53,54,46,22,67];
+  make('chOpConv',{type:'bar',data:{labels:opLabels,datasets:[{
+    label:'Conversão %',data:opConv,
+    backgroundColor:opConv.map(v=>v>=70?'rgba(16,185,129,.75)':v>=50?'rgba(90,74,130,.75)':'rgba(220,38,38,.65)'),
+    borderRadius:4}]
+  },options:{responsive:true,indexAxis:'y',scales:{x:{max:100,ticks:{color:C.muted,callback:v=>v+'%'},grid:{color:gridColor}},y:{ticks:{color:C.muted,font:{size:11}},grid:{display:false}}},plugins:{legend:{display:false}}}});
+
+  make('chOpCiclo',{type:'bar',data:{labels:opLabels,datasets:[{
+    label:'Dias',data:[7,7,2,8,9,8,7,7,22],
+    backgroundColor:'rgba(90,74,130,.6)',borderRadius:4}]
+  },options:{responsive:true,indexAxis:'y',scales:{x:{ticks:{color:C.muted,callback:v=>v+'d'},grid:{color:gridColor}},y:{ticks:{color:C.muted,font:{size:11}},grid:{display:false}}},plugins:{legend:{display:false}}}});
+}
+
+window.addEventListener('load',()=>setTimeout(initCharts,200));
+</script>
+</body>
+</html>
